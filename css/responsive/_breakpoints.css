@@ -1,0 +1,19 @@
+/* ==========================================================================
+   responsive/_breakpoints.css — RESZPONZÍV FINOMHANGOLÁS
+   --------------------------------------------------------------------------
+   ÁLLAPOT: 0. fázis — egyelőre ÜRES (placeholder).
+
+   Ez a fájl a MINDIG LEGVÉGÉN töltődik be a main.css-ben, ezért felül tudja
+   írni az összes korábbi szabályt. Ide kerülnek a szünetpontok (breakpoints):
+
+       Mobil-first megközelítés:
+         - alap (minden méretre)         : a fő CSS fájlokban
+         - @media (min-width: 640px)     : nagy mobil / kis tablet
+         - @media (min-width: 1024px)    : tablet
+         - @media (min-width: 1280px)    : desktop finomhangolás
+
+   Tartalma a 7. FÁZISBAN (csiszolás) készül el, de már most létrehozzuk,
+   hogy a szerkezet teljes legyen.
+   ========================================================================== */
+
+/* TODO (7. fázis): szünetpontok szerinti finomhangolás ide kerül. */

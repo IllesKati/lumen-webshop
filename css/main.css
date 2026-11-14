@@ -1,0 +1,46 @@
+/* ==========================================================================
+   main.css — A STÍLUSLAPOK BELÉPÉSI PONTJA
+   --------------------------------------------------------------------------
+   Az index.html CSAK erre az egy fájlra hivatkozik. Ez a fájl aztán
+   @import-tal behúzza az összes többit, logikus sorrendben.
+
+   Miért jó ez? Mert a stílus kisebb, átlátható fájlokra van bontva
+   (base / layout / components / sections / responsive), mégis egyetlen
+   belépési pontot használunk. Így a projekt könnyen bővíthető: új
+   komponensnél csak egy új fájlt és egy @import sort adunk hozzá.
+
+   SORREND SZÁMÍT! A böngésző fentről lefelé olvassa:
+     1. tokenek (--változók)  -> mindenki ezt használja
+     2. reset                 -> nullázás
+     3. base / tipográfia     -> alap stílusok
+     4. layout                -> nagy szerkezet (fejléc, footer, rács)
+     5. components            -> újrahasználható elemek (gomb, kártya...)
+     6. sections              -> oldal-specifikus szekciók
+     7. responsive            -> felülíró mobilos finomhangolás (legvégén!)
+   ========================================================================== */
+
+/* --- 1. Alap: tokenek, reset, tipográfia --------------------------------- */
+@import url("base/_variables.css");
+@import url("base/_reset.css");
+@import url("base/_typography.css");
+
+/* --- 2. Layout: a nagy szerkezeti elemek --------------------------------- */
+@import url("layout/_header.css");
+@import url("layout/_footer.css");
+@import url("layout/_grid.css");
+
+/* --- 3. Komponensek: újrahasználható építőelemek ------------------------- */
+@import url("components/_buttons.css");
+@import url("components/_product-card.css");
+@import url("components/_cart.css");
+@import url("components/_filters.css");
+@import url("components/_modal.css");
+
+/* --- 4. Szekciók: oldal-specifikus blokkok ------------------------------ */
+@import url("sections/_hero.css");
+@import url("sections/_categories.css");
+@import url("sections/_custom-order.css");
+@import url("sections/_product-detail.css");
+
+/* --- 5. Reszponzív: MINDIG legvégén, hogy felülírhassa a többit ---------- */
+@import url("responsive/_breakpoints.css");

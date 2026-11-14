@@ -1,0 +1,86 @@
+/* ==========================================================================
+   _variables.css — DESIGN TOKENEK (a projekt "színkódja")
+   --------------------------------------------------------------------------
+   MINDEN szín, betűméret, térköz és animációs idő itt, egyetlen helyen él.
+   Miért? Mert így az egész weboldal megjelenését innen tudjuk vezérelni:
+   ha itt átírsz egy értéket, az az egész oldalon érvényesül.
+   A dizájn irány: sötét-elegáns, tech-luxus, visszafogott akcentussal.
+   ========================================================================== */
+
+:root {
+  /* --- Alapszínek: sötét, réteges felület -------------------------------- */
+  --color-bg:            #0a0b0e;   /* A legmélyebb háttér (oldal alapja)   */
+  --color-surface:       #12141a;   /* Kártyák, panelek háttere             */
+  --color-surface-2:     #1a1d25;   /* Kiemelt felület (hover, kártya fej)  */
+  --color-border:        #262a34;   /* Finom elválasztó vonalak             */
+
+  /* --- Szöveg: világos tipográfia a sötét háttéren ---------------------- */
+  --color-text:          #f2f4f8;   /* Fő szövegszín (szinte fehér)         */
+  --color-text-muted:    #9aa3b2;   /* Másodlagos, halványabb szöveg        */
+  --color-text-faint:    #5f6878;   /* Nagyon halvány (pl. apró feliratok)  */
+
+  /* --- Akcentszínek: visszafogott, prémium tech-luxus -------------------- */
+  --color-accent:        #c9a227;   /* Arany — a fő prémium akcentus        */
+  --color-accent-soft:   #e4c96a;   /* Világosabb arany (hover, ragyogás)   */
+  --color-accent-cool:   #4a9dff;   /* Hűvös kék — másodlagos, tech érzet   */
+
+  /* --- Állapotszínek ----------------------------------------------------- */
+  --color-success:       #3ecf8e;
+  --color-danger:        #ff5c6c;
+
+  /* --- Árnyékok és ragyogás (a "mélység" érzetéhez) ---------------------- */
+  --shadow-sm:    0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md:    0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-lg:    0 24px 60px rgba(0, 0, 0, 0.55);
+  --glow-accent:  0 0 40px rgba(201, 162, 39, 0.25);  /* finom arany derengés */
+
+  /* --- Tipográfia -------------------------------------------------------- */
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif; /* címek   */
+  --font-body:    "Inter", "Segoe UI", system-ui, sans-serif;         /* szöveg  */
+
+  /* Folyékony (reszponzív) betűméretek: clamp(legkisebb, ideális, legnagyobb) */
+  --fs-hero:    clamp(2.5rem, 7vw, 5.5rem);   /* Hero főcím — hatalmas         */
+  --fs-h1:      clamp(2rem, 4.5vw, 3.25rem);
+  --fs-h2:      clamp(1.5rem, 3vw, 2.25rem);
+  --fs-h3:      clamp(1.15rem, 2vw, 1.4rem);
+  --fs-body:    1rem;
+  --fs-sm:      0.875rem;
+  --fs-xs:      0.75rem;
+
+  --lh-tight:   1.1;
+  --lh-normal:  1.6;
+
+  /* --- Térköz-skála (a "sok fehér tér" = bő, levegős elrendezés) --------- */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* --- Elrendezés -------------------------------------------------------- */
+  --container-max: 1280px;   /* A tartalom maximális szélessége              */
+  --header-height: 72px;
+
+  /* --- Lekerekítés ------------------------------------------------------- */
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-lg:   24px;
+  --radius-pill: 999px;
+
+  /* --- Animáció: finom és gyors, sosem lassú/idegesítő ------------------- */
+  --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);   /* lágy "kifutás"           */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast:  150ms;
+  --dur-base:  280ms;
+  --dur-slow:  500ms;
+
+  /* --- Rétegek (z-index): ki kerüljön előre ------------------------------ */
+  --z-header: 100;
+  --z-drawer: 200;   /* kosár panel  */
+  --z-modal:  300;   /* részletes nézet */
+  --z-toast:  400;   /* felugró üzenet  */
+}

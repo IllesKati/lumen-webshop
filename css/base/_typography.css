@@ -1,0 +1,113 @@
+/* ==========================================================================
+   _typography.css — TIPOGRÁFIA ÉS ALAP SEGÉDOSZTÁLYOK
+   --------------------------------------------------------------------------
+   A betűstílusok szabályai. Itt dől el, hogyan néznek ki a címek, szövegek,
+   és itt vannak azok az apró "segédosztályok", amiket a HTML-ben újra és
+   újra használunk (pl. container, section-title).
+   ========================================================================== */
+
+/* --- Címek: a "display" betűtípus adja a prémium karaktert --------------- */
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  /* kicsit összehúzva — elegánsabb, modern hatás */
+}
+
+h1 {
+  font-size: var(--fs-h1);
+}
+
+h2 {
+  font-size: var(--fs-h2);
+}
+
+h3 {
+  font-size: var(--fs-h3);
+}
+
+/* --- Szöveg segédosztályok --------------------------------------------- */
+
+/* Halványabb, másodlagos szöveg */
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+/* Nagyon halvány, apró felirat (pl. kategória-címke a terméken) */
+.text-faint {
+  color: var(--color-text-faint);
+}
+
+/* Arany kiemelés — akcentusszínű szövegrész */
+.text-accent {
+  color: var(--color-accent);
+}
+
+/* Kis méretű segédszöveg */
+.text-sm {
+  font-size: var(--fs-sm);
+}
+
+/* Kisbetűs, ritkított "felsőcímke" (eyebrow) — prémium webshopok kedvence */
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  /* szellős betűköz = luxus érzet */
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   ELRENDEZÉSI SEGÉDOSZTÁLYOK (layout helpers)
+   ========================================================================== */
+
+/* A .container fogja közre az oldal tartalmát: középre igazítja,
+   korlátozza a szélességet, és oldalt ad neki levegőt (padding). */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  /* vízszintesen középre */
+  padding-inline: var(--space-6);
+  /* oldalt belső térköz */
+}
+
+/* Egy-egy nagy szekció (hero, terméklista, footer...) függőleges ritmusa */
+.section {
+  padding-block: var(--space-24);
+}
+
+/* Szekció fejléc: felsőcímke + cím + rövid leírás egymás alatt */
+.section-head {
+  max-width: 640px;
+  margin-bottom: var(--space-12);
+}
+
+.section-head h2 {
+  margin-top: var(--space-3);
+}
+
+.section-head p {
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   VIZUÁLISAN REJTETT, DE KÉPOLVASÓNAK LÁTHATÓ SZÖVEG
+   (SEO és akadálymentesség miatt fontos — pl. "Kosárba" gomb felirata)
+   ========================================================================== */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

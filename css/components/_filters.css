@@ -1,0 +1,768 @@
+/* ==========================================================================
+   components/_filters.css — KERESÉS ÉS SZŰRŐK
+   --------------------------------------------------------------------------
+   ÁLLAPOT: 3. fázis — KÉSZ (keresés + szűrőfelület).
+
+   A terméklista feletti kereső-sáv és szűrőpanel stílusai: keresőmező,
+   kategória-szűrők (chips), ár szerinti szűrés, rendezési választó, aktív
+   szűrőállapotok, valamint a "szűrők törlése" gomb.
+
+   HOGYAN KAPCSOLÓDIK A HTML-HEZ (index.html, 3. fázisban JS tölti fel):
+     A #products szekció ELÉ/ELÉ épül a szűrősáv. A várt szerkezet:
+
+     <section class="filters" aria-label="Termékszűrők">
+       <form class="filters__form">
+         <div class="filters__search">
+           <label class="visually-hidden" for="filters-search">Keresés</label>
+           <input id="filters-search" class="filters__search-input" type="search"
+                  placeholder="Keresés a termékek között...">
+         </div>
+
+         <div class="filters__group">
+           <h3 class="filters__legend">Kategória</h3>
+           <ul class="filters__chips">
+             <li><button class="filters__chip is-active" type="button" aria-pressed="true">Mind</button></li>
+             <li><button class="filters__chip" type="button" aria-pressed="false">Robotika</button></li>
+           </ul>
+         </div>
+
+         <fieldset class="filters__group filters__group--price">
+           <legend class="filters__legend">Ár</legend>
+           <div class="filters__range">
+             <input class="filters__range-input" type="range" min="0" max="200000" step="5000">
+             <output class="filters__range-value">0 Ft</output>
+           </div>
+           <ul class="filters__options">
+             <li><label class="filters__option">
+               <input class="filters__checkbox" type="checkbox">
+               <span class="filters__option-label">50 000 Ft alatt</span>
+             </label></li>
+           </ul>
+         </fieldset>
+
+         <button class="filters__reset" type="reset">Szűrők törlése</button>
+       </form>
+       <p class="filters__count" aria-live="polite">24 termék</p>
+     </section>
+
+   MIÉRT ÍGY: a szűrők MEGJELENÉSE itt él, a MŰKÖDÉSÜK (szűrés, darabszám,
+   aktív osztályok váltása, aria-pressed frissítése) a JavaScript feladata —
+   ez a fájl csak a stabil osztálynevekhez ad stílust, hogy a JS később
+   nyugodtan rákapcsolhasson.
+
+   MOBILE-FIRST: mobilon a szűrők egymás alatt, kényelmes érintési célokkal;
+   640px-től vízszintes, tördelt elrendezés; 1024px-től rendezett rácssáv.
+
+   Minden szín, méret, térköz és animációs idő a base/_variables.css
+   tokenjeiből jön — új globális változót NEM vezetünk be.
+   ========================================================================== */
+
+
+/* --- 1. SZŰRŐSÁV ALAP (.filters) --------------------------------------- */
+
+.filters {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-6);
+
+   padding: var(--space-6);
+   margin-bottom: var(--space-8);
+
+   background-color: var(--color-surface);
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-md);
+   box-shadow: var(--shadow-sm);
+   color: var(--color-text);
+}
+
+/* Az űrlap maga is rugalmas oszlop: mobilon minden szűrő egymás alatt. */
+.filters__form {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-6);
+   width: 100%;
+}
+
+/* Egy-egy szűrőcsoport (kategória, ár, rendezés...) */
+.filters__group {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-3);
+
+   min-width: 0;
+   /* a rácsban/flexben ne feszítse szét a hosszú tartalom */
+   margin: 0;
+   padding: 0;
+   border: 0;
+   /* <fieldset> alap keretének nullázása */
+}
+
+/* Csoportcím: apró, ritkított, arany felsőcímke (eyebrow-jelleg) */
+.filters__legend {
+   padding: 0;
+   font-family: var(--font-body);
+   font-size: var(--fs-xs);
+   font-weight: 600;
+   letter-spacing: 0.16em;
+   text-transform: uppercase;
+   color: var(--color-text-muted);
+}
+
+
+/* --- 2. KERESŐMEZŐ (.filters__search-input) ---------------------------- */
+
+.filters__search {
+   position: relative;
+   width: 100%;
+}
+
+.filters__search-input {
+   display: block;
+   width: 100%;
+   min-height: 48px;
+   /* kényelmes érintési cél mobilon */
+   padding: var(--space-3) var(--space-4);
+
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   line-height: var(--lh-normal);
+   color: var(--color-text);
+
+   background-color: var(--color-surface-2);
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-pill);
+
+   transition: border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.filters__search-input::placeholder {
+   color: var(--color-text-faint);
+   opacity: 1;
+   /* a Firefox alapból halványítaná */
+}
+
+.filters__search-input:hover {
+   border-color: var(--color-text-faint);
+}
+
+/* Fókusz: arany keret + finom derengés (a gombokkal összhangban) */
+.filters__search-input:focus {
+   outline: none;
+}
+
+.filters__search-input:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+   border-color: var(--color-accent);
+   box-shadow: var(--glow-accent);
+}
+
+/* A böngésző beépített kereső-ikonját visszafogjuk sötét témán */
+.filters__search-input::-webkit-search-cancel-button {
+   filter: invert(0.7);
+   cursor: pointer;
+}
+
+/* Kereső ikon a mező mellett (ha a JS/HTML odatesz egy SVG-t) */
+.filters__search-icon {
+   position: absolute;
+   top: 50%;
+   left: var(--space-4);
+   width: 18px;
+   height: 18px;
+   transform: translateY(-50%);
+   color: var(--color-text-faint);
+   pointer-events: none;
+   /* ne lopja el a kattintást a mezőtől */
+}
+
+/* Ha van ikon, a mező bal paddingje nőjön */
+.filters__search-icon~.filters__search-input {
+   padding-left: var(--space-12);
+}
+
+
+/* --- 3. KATEGÓRIA-CHIPEK (.filters__chips, .filters__chip) ------------- */
+
+.filters__chips {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   gap: var(--space-2);
+}
+
+.filters__chip {
+   display: inline-flex;
+   align-items: center;
+   gap: var(--space-2);
+   min-height: 44px;
+   /* érintésre kényelmes */
+   padding: var(--space-2) var(--space-4);
+
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   font-weight: 600;
+   line-height: 1;
+   white-space: nowrap;
+
+   color: var(--color-text-muted);
+   background-color: transparent;
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-pill);
+
+   cursor: pointer;
+   user-select: none;
+   -webkit-tap-highlight-color: transparent;
+
+   transition: color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.filters__chip:hover {
+   color: var(--color-text);
+   background-color: var(--color-surface-2);
+   border-color: var(--color-accent);
+}
+
+.filters__chip:active {
+   transform: translateY(1px);
+}
+
+.filters__chip:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+}
+
+/* AKTÍV chip: arany háttér, sötét szöveg — egyértelmű kiválasztás.
+   A JS a .is-active osztályt ÉS az aria-pressed="true"-t állítja. */
+.filters__chip.is-active,
+.filters__chip[aria-pressed="true"],
+.filters__chip[aria-selected="true"] {
+   color: var(--color-bg);
+   background-color: var(--color-accent);
+   border-color: var(--color-accent);
+   box-shadow: var(--shadow-sm);
+}
+
+.filters__chip.is-active:hover,
+.filters__chip[aria-pressed="true"]:hover {
+   background-color: var(--color-accent-soft);
+   border-color: var(--color-accent-soft);
+}
+
+
+/* --- 4. ÁR SZERINTI SZŰRÉS --------------------------------------------- */
+
+/* Csúszka (range) körüli elrendezés: a sáv és az érték egymás mellett */
+.filters__range {
+   display: flex;
+   align-items: center;
+   gap: var(--space-4);
+   flex-wrap: wrap;
+}
+
+/* A natív csúszka alap kinézete sötét témára hangolva. */
+.filters__range-input {
+   flex: 1 1 160px;
+   min-width: 0;
+   height: 44px;
+   /* kényelmes érintési magasság */
+   margin: 0;
+   padding: 0;
+   background-color: transparent;
+   cursor: pointer;
+   -webkit-appearance: none;
+   appearance: none;
+}
+
+/* A sáv (track) — finom, süllyesztett vonal */
+.filters__range-input::-webkit-slider-runnable-track {
+   height: 4px;
+   background-color: var(--color-border);
+   border-radius: var(--radius-pill);
+}
+
+.filters__range-input::-moz-range-track {
+   height: 4px;
+   background-color: var(--color-border);
+   border-radius: var(--radius-pill);
+}
+
+/* A fogantyú (thumb) — arany korong, hoverre világosabb */
+.filters__range-input::-webkit-slider-thumb {
+   -webkit-appearance: none;
+   appearance: none;
+   width: 20px;
+   height: 20px;
+   margin-top: -8px;
+   /* a 4px-es sávhoz középre igazítva */
+   background-color: var(--color-accent);
+   border: 2px solid var(--color-bg);
+   border-radius: var(--radius-pill);
+   box-shadow: var(--shadow-sm);
+   transition: background-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.filters__range-input::-moz-range-thumb {
+   width: 20px;
+   height: 20px;
+   background-color: var(--color-accent);
+   border: 2px solid var(--color-bg);
+   border-radius: var(--radius-pill);
+   box-shadow: var(--shadow-sm);
+   transition: background-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.filters__range-input:hover::-webkit-slider-thumb {
+   background-color: var(--color-accent-soft);
+}
+
+.filters__range-input:hover::-moz-range-thumb {
+   background-color: var(--color-accent-soft);
+}
+
+.filters__range-input:focus {
+   outline: none;
+}
+
+.filters__range-input:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 4px;
+   border-radius: var(--radius-sm);
+}
+
+/* Az ár kijelzett értéke (output) */
+.filters__range-value {
+   min-width: 8ch;
+   font-family: var(--font-display);
+   font-size: var(--fs-sm);
+   font-weight: 700;
+   line-height: var(--lh-tight);
+   text-align: right;
+   color: var(--color-accent);
+}
+
+/* Előre gyártott ársávok (pl. "50 000 Ft alatt") — ugyanaz a minta,
+   mint a chip-eknél, csak téglalaposabb formában. */
+.filters__options {
+   display: flex;
+   flex-wrap: wrap;
+   gap: var(--space-2);
+}
+
+
+/* --- 5. CHECKBOX ÉS RADIO — IGÉNYES MEGJELENÉS -------------------------- */
+
+/* A sor: a beviteli mező + címke egymás mellett, kényelmes érintési cél. */
+.filters__option {
+   display: inline-flex;
+   align-items: center;
+   gap: var(--space-3);
+   min-height: 44px;
+   padding: var(--space-2) var(--space-3);
+
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   color: var(--color-text-muted);
+
+   border: 1px solid transparent;
+   /* hely a hover/fókusz keretnek — nem ugrik a layout */
+   border-radius: var(--radius-pill);
+   cursor: pointer;
+   user-select: none;
+   -webkit-tap-highlight-color: transparent;
+
+   transition: color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+}
+
+.filters__option:hover {
+   color: var(--color-text);
+   background-color: var(--color-surface-2);
+   border-color: var(--color-border);
+}
+
+/* A tényleges <input> láthatatlan marad, de fókuszálható és
+   kattintható — a látványt a testvér <span> adja.
+   NEM "display: none", mert az kizárná a billentyűzetes fókuszt! */
+.filters__checkbox,
+.filters__radio {
+   position: absolute;
+   width: 1px;
+   height: 1px;
+   margin: -1px;
+   padding: 0;
+   overflow: hidden;
+   clip: rect(0, 0, 0, 0);
+   white-space: nowrap;
+   border: 0;
+}
+
+/* A saját jelölő négyzet/kör */
+.filters__checkbox+.filters__option-label,
+.filters__radio+.filters__option-label {
+   display: inline-flex;
+   align-items: center;
+   gap: var(--space-3);
+}
+
+/* A doboz maga: pszeudo-elemmel rajzoljuk a jelölőt */
+.filters__checkbox+.filters__option-label::before,
+.filters__radio+.filters__option-label::before {
+   content: "";
+   flex: 0 0 auto;
+   width: 20px;
+   height: 20px;
+   background-color: var(--color-surface-2);
+   border: 1px solid var(--color-border);
+   transition: background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+}
+
+/* Checkbox: enyhén lekerekített négyzet */
+.filters__checkbox+.filters__option-label::before {
+   border-radius: var(--radius-sm);
+}
+
+/* Radio: teljesen kör */
+.filters__radio+.filters__option-label::before {
+   border-radius: var(--radius-pill);
+}
+
+/* A pipa (checkbox) és a belső pont (radio) — alapból rejtve */
+.filters__checkbox+.filters__option-label::after,
+.filters__radio+.filters__option-label::after {
+   content: "";
+   position: absolute;
+   opacity: 0;
+   transition: opacity var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+}
+
+/* A címke lesz a pozicionálási viszonyítási pont a pszeudo-elemekhez */
+.filters__option {
+   position: relative;
+}
+
+/* Pipa: forgatott "L" alakzattá hajlított szegély */
+.filters__checkbox+.filters__option-label::after {
+   top: 50%;
+   left: 4px;
+   width: 10px;
+   height: 6px;
+   border-left: 2px solid var(--color-bg);
+   border-bottom: 2px solid var(--color-bg);
+   transform: translateY(-70%) rotate(-45deg) scale(0.6);
+   transform-origin: center;
+}
+
+/* Radio belső pont */
+.filters__radio+.filters__option-label::after {
+   top: 50%;
+   left: 10px;
+   width: 10px;
+   height: 10px;
+   background-color: var(--color-bg);
+   border-radius: var(--radius-pill);
+   transform: translate(-50%, -50%) scale(0.6);
+}
+
+/* BEJELÖLT állapot: arany háttér, a jelölő megjelenik */
+.filters__checkbox:checked+.filters__option-label::before,
+.filters__radio:checked+.filters__option-label::before {
+   background-color: var(--color-accent);
+   border-color: var(--color-accent);
+}
+
+.filters__checkbox:checked+.filters__option-label::after,
+.filters__radio:checked+.filters__option-label::after {
+   opacity: 1;
+   transform: translateY(-70%) rotate(-45deg) scale(1);
+}
+
+.filters__radio:checked+.filters__option-label::after {
+   transform: translate(-50%, -50%) scale(1);
+}
+
+/* A kijelölt opció szövege váljon hangsúlyossá */
+.filters__checkbox:checked~.filters__option-label,
+.filters__radio:checked~.filters__option-label {
+   color: var(--color-text);
+}
+
+/* Fókusz: a LÁTHATATLAN input fókusza a LÁTHATÓ jelölőt emeli ki.
+   Így a tabbal történő navigáció mindig látható marad. */
+.filters__checkbox:focus-visible+.filters__option-label::before,
+.filters__radio:focus-visible+.filters__option-label::before {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+   border-color: var(--color-accent);
+}
+
+/* A sor maga is kapjon finom kiemelést fókusznál */
+.filters__option:focus-within {
+   color: var(--color-text);
+   background-color: var(--color-surface-2);
+   border-color: var(--color-border);
+}
+
+/* Letiltott opció: halvány, nem kattintható */
+.filters__option:has(input:disabled) {
+   opacity: 0.45;
+   cursor: not-allowed;
+}
+
+
+/* --- 6. AKTÍV SZŰRŐÁLLAPOT ÉS A SZŰRŐK TÖRLÉSE ------------------------ */
+
+/* A "Szűrők törlése" gomb: visszafogott, csak akkor hangsúlyos, ha van
+   mit törölni (a JS a .is-active osztályt / a disabled attribútumot állítja). */
+.filters__reset {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: var(--space-2);
+   align-self: flex-start;
+   min-height: 44px;
+   padding: var(--space-2) var(--space-4);
+
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   font-weight: 600;
+   line-height: 1;
+   color: var(--color-text-muted);
+
+   background-color: transparent;
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-pill);
+
+   cursor: pointer;
+   transition: color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+}
+
+.filters__reset:hover {
+   color: var(--color-text);
+   background-color: var(--color-surface-2);
+   border-color: var(--color-accent);
+}
+
+.filters__reset:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+}
+
+/* Aktív (van mit törölni): arany körvonal + ikon jelzi */
+.filters__reset.is-active {
+   color: var(--color-accent);
+   border-color: var(--color-accent);
+   box-shadow: var(--shadow-sm);
+}
+
+/* Ha nincs aktív szűrő, a gomb halvány (a JS a disabled attribútummal
+   kapcsolja ki — ezért kezeljük a :disabled állapotot is). */
+.filters__reset:disabled,
+.filters__reset[aria-disabled="true"] {
+   opacity: 0.45;
+   cursor: not-allowed;
+   pointer-events: none;
+}
+
+/* Aktív szűrők összegző sávja (a kiválasztott szűrők listája) */
+.filters__active {
+   display: flex;
+   align-items: center;
+   flex-wrap: wrap;
+   gap: var(--space-2);
+}
+
+.filters__active-label {
+   font-family: var(--font-body);
+   font-size: var(--fs-xs);
+   font-weight: 600;
+   letter-spacing: 0.16em;
+   text-transform: uppercase;
+   color: var(--color-text-muted);
+}
+
+/* Egy aktív szűrő címkéje: törölhető chip (a × a JS-sel jön/nyílik) */
+.filters__tag {
+   display: inline-flex;
+   align-items: center;
+   gap: var(--space-2);
+   min-height: 32px;
+   padding: var(--space-1) var(--space-3);
+
+   font-family: var(--font-body);
+   font-size: var(--fs-xs);
+   font-weight: 600;
+   color: var(--color-accent);
+
+   background-color: var(--color-surface-2);
+   border: 1px solid var(--color-accent);
+   border-radius: var(--radius-pill);
+}
+
+.filters__tag:hover {
+   color: var(--color-bg);
+   background-color: var(--color-accent);
+}
+
+.filters__tag:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+}
+
+/* Találatok száma (a szűrés élő visszajelzése) */
+.filters__count {
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   color: var(--color-text-muted);
+}
+
+.filters__count strong {
+   font-family: var(--font-display);
+   font-weight: 700;
+   color: var(--color-text);
+}
+
+/* Nincs találat jelzés */
+.filters__no-results {
+   padding: var(--space-8) var(--space-6);
+   text-align: center;
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   color: var(--color-text-muted);
+}
+
+
+/* --- 7. RESZPONZÍV FINOMHANGOLÁS ---------------------------------------- */
+
+/* Nagy mobil / kis tablet: a szűrők egy sorba tördelhetők, a csoportok
+   egymás mellé kerülhetnek. */
+@media (min-width: 640px) {
+   .filters {
+      padding: var(--space-8);
+   }
+
+   .filters__form {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: var(--space-4) var(--space-6);
+   }
+
+   .filters__search {
+      flex: 1 1 100%;
+      /* a kereső a teljes szélességet kapja az első sorban */
+   }
+
+   .filters__group {
+      flex: 1 1 auto;
+   }
+
+   .filters__count {
+      text-align: right;
+   }
+}
+
+/* Tablet és feljebb: rendezett, vízszintes szűrősáv */
+@media (min-width: 1024px) {
+   .filters__form {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) auto auto;
+      align-items: end;
+      column-gap: var(--space-8);
+      row-gap: var(--space-6);
+   }
+
+   .filters__search {
+      grid-column: 1;
+      width: 100%;
+      max-width: 460px;
+      margin-left: calc(50% - 21.25rem);
+   }
+
+   /* Az ár-csoport és a törlés gomb egy sorban, jobbra igazítva */
+   .filters__group--price {
+      grid-column: 2;
+   }
+
+   .filters__reset {
+      grid-column: 3;
+      justify-self: end;
+   }
+
+   /* Desktopon a csoportok egymás mellett, a címke felül */
+   .filters__group {
+      gap: var(--space-2);
+   }
+}
+
+/* Széles desktop: a szűrősáv középre igazított, maximális szélességgel */
+@media (min-width: 1280px) {
+   .filters {
+      padding: var(--space-8) var(--space-12);
+   }
+
+   .filters__form {
+      grid-template-columns: minmax(320px, 1fr) auto auto;
+   }
+}
+
+
+/* --- 8. AKADÁLYMENTESSÉG: CSÖKKENTETT MOZGÁS ---------------------------- */
+
+/* Ha a felhasználó kérte a "csökkentett mozgást", a hover/fókusz ne
+   mozgasson semmit — csak a szín- és keretváltozás maradjon visszajelzés. */
+@media (prefers-reduced-motion: reduce) {
+
+   .filters__search-input,
+   .filters__chip,
+   .filters__option,
+   .filters__reset {
+      transition: none;
+   }
+
+   .filters__chip:active {
+      transform: none;
+   }
+
+   .filters__range-input::-webkit-slider-thumb,
+   .filters__range-input::-moz-range-thumb {
+      transition: none;
+   }
+}
+
+
+/* --- 9. KÉNYSZERÍTETT SZÍNEK (kontraszt) ------------------------------- */
+
+/* Nagy kontrasztú módban a keretek és az aktív állapotok legyenek
+   egyértelműen megkülönböztethetők. */
+@media (prefers-contrast: more) {
+   .filters {
+      border-width: 2px;
+   }
+
+   .filters__chip,
+   .filters__reset,
+   .filters__search-input {
+      border-width: 2px;
+      border-style: solid;
+   }
+
+   .filters__chip[aria-pressed="true"],
+   .filters__chip.is-active {
+      outline: 2px solid var(--color-text);
+      outline-offset: 1px;
+   }
+}

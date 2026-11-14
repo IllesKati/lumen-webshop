@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<!-- ==========================================================================
+     index.html — A WEBOLDAL VÁZA (0. fázis)
+     --------------------------------------------------------------------------
+    Ez az EGYETLEN HTML fájl a projektben. A benne lévő szekciók (<section>)
+    egyelőre ÜRESEK — csak a "helyét" jelölik ki annak, amit a következő
+      <div class="categories__inner">
+        <header class="categories__header section-head">
+          <p class="eyebrow">GONDOSAN VÁLOGATVA</p>
+          <h2 class="categories__title">Fedezd fel kategóriáinkat</h2>
+          <p class="categories__intro">
+            Válogass gondosan kiválasztott ajándékok, játékok, tech-kiegészítők és design tárgyak között.
+          </p>
+        </header>
+
+        <div class="categories__grid">
+          <article class="categories__card" data-category="Ajándéktárgyak">
+            <div class="categories__visual">
+              <svg class="categories__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <path d="M8 21h32v20H8zM5 15h38v7H5zM24 15v26" />
+                <path d="M24 15c-2-9-13-10-13-4 0 5 8 5 13 4Zm0 0c2-9 13-10 13-4 0 5-8 5-13 4Z" />
+              </svg>
+            </div>
+            <h3 class="categories__name">Ajándéktárgyak</h3>
+            <p class="categories__description">Különleges tárgyak, amelyek emlékezetessé teszik az ajándékozást.</p>
+          </article>
+
+          <article class="categories__card" data-category="Játékok">
+            <div class="categories__visual">
+              <svg class="categories__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <path d="m24 5 18 10v18L24 43 6 33V15L24 5Z" />
+                <path d="m6 15 18 11 18-11M24 26v17M15 10l18 11v9" />
+              </svg>
+            </div>
+            <h3 class="categories__name">Játékok</h3>
+            <p class="categories__description">Modern, kreatív játékok és különleges kikapcsolódás.</p>
+          </article>
+
+          <article class="categories__card" data-category="Tech-kiegészítők">
+            <div class="categories__visual">
+              <svg class="categories__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <circle cx="24" cy="24" r="6" />
+                <ellipse cx="24" cy="24" rx="19" ry="9" transform="rotate(-35 24 24)" />
+                <path d="M24 5v5m0 28v5M5 24h5m28 0h5" />
+                <circle class="categories__icon-dot" cx="38" cy="13" r="2.5" />
+              </svg>
+            </div>
+            <h3 class="categories__name">Tech-kiegészítők</h3>
+            <p class="categories__description">Praktikus és látványos kiegészítők a mindennapi technológiához.</p>
+          </article>
+
+          <article class="categories__card" data-category="Design tárgyak">
+            <div class="categories__visual">
+              <svg class="categories__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <path d="M9 40V23a15 15 0 0 1 30 0v17M16 40V24a8 8 0 0 1 16 0v16M7 40h34" />
+                <path d="M24 9v7m-7 8h14" />
+              </svg>
+            </div>
+            <h3 class="categories__name">Design tárgyak</h3>
+            <p class="categories__description">Karakteres tárgyak azoknak, akik a különleges formákat keresik.</p>
+          </article>
+        </div>
+      </div>
+     fázisokban töltünk fel tartalommal.
+
+     Miért üresek? Mert a projekt adat-vezérelt lesz: a termékeket, a kosarat,
+     a szűrőket JavaScript generálja a HTML-be. A HTML tehát nem a tartalom
+     helye, hanem a SZERKEZETÉ. Ez teszi később könnyen bővíthetővé a projektet.
+
+     Az oldal nyelve magyar (lang="hu"), hogy a keresők és a képernyőolvasók
+     helyesen kezeljék.
+     ========================================================================== -->
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- viewport: EZ TESZI RESZPONZÍVÉ AZ OLDALT. Nélküle mobilon kicsinyítve,
+       asztali nézetben látszaná az oldal. Ne hagyd ki! -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>LUMEN — 3D nyomtatott és egyedi gyártású termékek</title>
+  <meta name="description"
+    content="LUMEN — kész 3D-nyomtatott termékek és egyedi gyártás. Kérj ajánlatot saját 3D modelledre, ötletedre vagy fényképedre." />
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="favicon-16.png" type="image/png" sizes="16x16" />
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="favicon.png" type="image/png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180" />
+
+  <!-- Betűtípusok betöltése a Google Fonts-ról (CDN):
+       - Space Grotesk : a karakteres "display" betű a címekhez
+       - Inter         : a tiszta, jól olvasható törzsszöveg-betű
+       A preconnect sorok gyorsítják a betöltést (előre felveszi a kapcsolatot). -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" />
+
+  <!-- Az EGYETLEN saját stíluslapunk. Ez @import-tal behúzza az összes többit. -->
+  <link rel="stylesheet" href="css/main.css" />
+
+  <!-- ================================================================
+       IMPORT MAP — Three.js betöltése build tool NÉLKÜL
+       ----------------------------------------------------------------
+       Ez a modern böngészők beépített funkciója. Azt mondja meg, hogy
+       amikor a JS kódban azt írjuk: import * as THREE from "three",
+       akkor honnan töltse le a "three" csomagot.
+
+       Miért így? Mert így NEM kell npm-mel telepíteni és buildelni (nem
+       kell Vite/Webpack). A böngésző maga oldja fel a nevet egy CDN címre.
+       Az "addons/" alatt a Three.js kiegészítői érhetők el (pl. a modell-
+       betöltő GLTFLoader, amit a 6. fázisban használunk majd).
+
+       FIGYELEM: az import map-nek a modulokat betöltő <script type="module">
+       ELŐTT kell szerepelnie a HTML-ben. Ezért van itt a <head>-ben.
+       ================================================================ -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <!-- ==========================================================================
+       UGRÁS A TARTALOMRA (Skip link) — akadálymentesség
+       Kizárólag billentyűzettel használva ez az első elem, így a felhasználó
+       egyből a tartalomra ugorhat, nem kell végigtabolnia a menüt.
+       Alapból rejtett (.visually-hidden), fókuszra láthatóvá válik.
+       ========================================================================== -->
+  <a href="#main" class="visually-hidden">Ugrás a tartalomra</a>
+
+
+  <!-- ==========================================================================
+       1. FEJLÉC ÉS NAVIGÁCIÓ  (1. fázisban készül el)
+       Sticky fejléc: logó, menüpontok, kereső ikon, kosár ikon.
+       A belsejét JavaScript építi / köti be.
+       ========================================================================== -->
+  <header id="site-header" class="site-header" data-header>
+    <!-- A fejléc tartalmát egy belső konténer fogja össze, hogy a maximális
+         szélességet és az oldalsó margót egységesen lehessen kezelni
+         (lásd: css/layout/_grid.css -> .container). -->
+    <div class="site-header__inner container">
+
+      <!-- LOGÓ — a márkanév. A <a> a főoldalra visz, ezért a logó
+           egyszerre dekoráció és navigációs elem. A felolvasóknak az
+           aria-label ad pontos nevet. -->
+      <a href="#hero" class="site-header__logo" aria-label="LUMEN — kezdőlap">
+        LUMEN
+      </a>
+
+      <button type="button" class="site-header__icon-btn site-header__menu-toggle" data-menu-toggle
+        aria-label="Menü megnyitása" aria-expanded="false" aria-controls="site-navigation">
+        <svg class="site-header__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path class="site-header__menu-line site-header__menu-line--top" d="M4 7h16" />
+          <path class="site-header__menu-line site-header__menu-line--middle" d="M4 12h16" />
+          <path class="site-header__menu-line site-header__menu-line--bottom" d="M4 17h16" />
+        </svg>
+      </button>
+
+      <!-- FŐMENÜ — a <nav> szemantikus elem jelzi, hogy ez navigáció.
+           Az aria-label megkülönbözteti a többi lehetséges navigációtól. -->
+      <nav id="site-navigation" class="site-header__nav" aria-label="Főmenü">
+        <ul class="site-header__menu">
+          <li><a href="#products" class="site-header__link">Termékek</a></li>
+          <li><a href="#categories" class="site-header__link">Kategóriák</a></li>
+          <li><a href="#hero" class="site-header__link">Kezdőlap</a></li>
+          <li><a href="#site-footer" class="site-header__link">Kapcsolat</a></li>
+        </ul>
+      </nav>
+
+      <!-- MŰVELETI IKONOK — keresés és kosár.
+           A gombokon aria-label van, mert csak ikon látszik (nincs szöveg).
+           A data- attribútumok a későbbi JavaScript moduloknak szólnak:
+           így a JS nem osztálynévre, hanem stabil horogra köt rá. -->
+      <div class="site-header__actions">
+        <button type="button" class="site-header__icon-btn" data-search-toggle aria-label="Keresés">
+          <svg class="site-header__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+
+        <button type="button" class="site-header__icon-btn" data-cart-toggle aria-label="Bevásárlókosár megnyitása">
+          <svg class="site-header__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M4 5h2l2.2 10.2a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.5-1.2L21 8H7" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="10" cy="20" r="1.4" fill="currentColor" />
+            <circle cx="18" cy="20" r="1.4" fill="currentColor" />
+          </svg>
+          <!-- Kosárszám-jelvény: a darabszámot a kosár modul írja bele (4. fázis).
+               Alapból rejtett, mert üres kosárnál nincs mit mutatni. -->
+          <span class="site-header__cart-count" data-cart-count hidden>0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+
+  <main id="main">
+
+    <!-- ==========================================================================
+         2. HERO SZEKCIÓ  (1. fázisban elrendezés, 5. fázisban a 3D)
+         Ez az oldal legfontosabb látványeleme: nagy cím + a 3D termékvászon.
+         A <canvas id="hero-canvas"> az a felület, amire a Three.js rajzol.
+         ========================================================================== -->
+    <section id="hero" class="hero">
+      <div class="hero__inner">
+        <div class="hero__content">
+          <p class="eyebrow hero__eyebrow">3D NYOMTATÁS ÉS EGYEDI GYÁRTÁS</p>
+          <h1 class="hero__title"><span class="visually-hidden">3D nyomtatás és egyedi gyártás: </span>Tárgyak, rétegről rétegre.</h1>
+          <p class="hero__description">
+            Válassz kész 3D-nyomtatott termékeinkből, vagy kérj egyedi gyártási ajánlatot saját modelledre, ötletedre
+            vagy fényképedre.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn--primary btn--lg" href="#products">Kész termékek</a>
+            <a class="btn btn--ghost btn--lg" href="#custom-order">Egyedi gyártás</a>
+          </div>
+        </div>
+
+        <div class="hero__visual">
+          <svg class="hero__art" viewBox="0 0 700 600" aria-hidden="true" focusable="false">
+            <defs>
+              <radialGradient id="hero-aura" cx="50%" cy="46%" r="52%">
+                <stop offset="0" stop-color="#c9a227" stop-opacity=".2" />
+                <stop offset=".52" stop-color="#c9a227" stop-opacity=".055" />
+                <stop offset="1" stop-color="#c9a227" stop-opacity="0" />
+              </radialGradient>
+              <linearGradient id="hero-metal" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#f3dfa0" />
+                <stop offset=".24" stop-color="#a9852b" />
+                <stop offset=".48" stop-color="#f5e4ac" />
+                <stop offset=".7" stop-color="#806321" />
+                <stop offset="1" stop-color="#d4b34e" />
+              </linearGradient>
+              <linearGradient id="hero-ceramic" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#333943" />
+                <stop offset=".48" stop-color="#191d24" />
+                <stop offset="1" stop-color="#090b0f" />
+              </linearGradient>
+              <linearGradient id="hero-glass" x1="0" y1="0" x2="0.9" y2="1">
+                <stop offset="0" stop-color="#e8cb70" stop-opacity=".92" />
+                <stop offset=".34" stop-color="#b78e2e" stop-opacity=".42" />
+                <stop offset="1" stop-color="#6c5520" stop-opacity=".16" />
+              </linearGradient>
+              <linearGradient id="hero-gift" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#59616a" />
+                <stop offset="1" stop-color="#242932" />
+              </linearGradient>
+              <filter id="hero-soft-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="12" />
+              </filter>
+              <filter id="hero-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="10" />
+              </filter>
+            </defs>
+
+            <ellipse cx="354" cy="292" rx="267" ry="236" fill="url(#hero-aura)" />
+            <ellipse cx="354" cy="476" rx="194" ry="35" fill="#000" opacity=".52" filter="url(#hero-shadow)" />
+
+            <g fill="none" stroke="#e4c96a" stroke-linecap="round">
+              <ellipse cx="351" cy="285" rx="208" ry="151" transform="rotate(-28 351 285)" stroke-opacity=".22"
+                stroke-width="1.3" />
+              <ellipse cx="351" cy="285" rx="171" ry="216" transform="rotate(34 351 285)" stroke-opacity=".12"
+                stroke-width="1" stroke-dasharray="2 10" />
+              <path d="M112 416 594 416" stroke="#f2f4f8" stroke-opacity=".08" />
+              <path d="M163 446 545 446" stroke="#f2f4f8" stroke-opacity=".045" />
+            </g>
+
+            <g opacity=".76">
+              <circle cx="185" cy="252" r="37" fill="#d2aa42" opacity=".16" filter="url(#hero-soft-glow)" />
+              <circle cx="185" cy="252" r="25" fill="url(#hero-ceramic)" stroke="#b99743" stroke-opacity=".72" />
+              <circle cx="185" cy="252" r="16" fill="none" stroke="url(#hero-metal)" stroke-width="2" />
+              <circle cx="185" cy="252" r="5" fill="#e4c96a" />
+              <path d="M185 224v6m0 44v6m-28-28h6m44 0h6" stroke="#e4c96a" stroke-opacity=".6" />
+            </g>
+
+            <g transform="translate(500 334) rotate(8)" opacity=".92">
+              <path d="m0 18 36-20 36 20-36 21z" fill="#73777b" />
+              <path d="m0 18 36 21v43L0 61z" fill="url(#hero-gift)" />
+              <path d="m72 18-36 21v43l36-21z" fill="#171b21" />
+              <path d="M31 12h10v63H31z" fill="url(#hero-metal)" opacity=".9" />
+              <path d="m29 8-8-7c-5-5-13-1-10 5 2 5 11 6 18 4m14-2 8-7c5-5 13-1 10 5-2 5-11 6-18 4" fill="none"
+                stroke="#e4c96a" stroke-width="4" stroke-linecap="round" />
+              <path d="m0 18 36 21 36-21" fill="none" stroke="#cbd0d7" stroke-opacity=".34" />
+            </g>
+
+            <g transform="translate(179 367) rotate(-13)" opacity=".82">
+              <path d="m0 13 28-16 28 16-28 16z" fill="#48505a" />
+              <path d="m0 13 28 16v32L0 45z" fill="#242932" />
+              <path d="m56 13-28 16v32l28-16z" fill="#15191f" />
+              <path d="m0 13 28 16 28-16" fill="none" stroke="#e4c96a" stroke-opacity=".55" />
+              <path d="M28 29v32" stroke="#e4c96a" stroke-opacity=".42" />
+            </g>
+
+            <g>
+              <path d="M281 422 305 386h98l26 36-22 19h-105z" fill="#171b21" stroke="#6e5a2c" stroke-opacity=".7" />
+              <path d="m305 386 27-13h43l28 13z" fill="#45413a" stroke="#d3b35a" stroke-opacity=".55" />
+              <ellipse cx="355" cy="439" rx="78" ry="15" fill="#0b0d11" stroke="url(#hero-metal)" stroke-opacity=".8"
+                stroke-width="2" />
+              <ellipse cx="355" cy="437" rx="52" ry="8" fill="#c9a227" opacity=".32" filter="url(#hero-soft-glow)" />
+            </g>
+
+            <g>
+              <path
+                d="M315 377c-36-39-39-104-10-153 17-28 36-47 50-65 14 18 33 37 50 65 29 49 26 114-10 153-19 20-61 20-80 0z"
+                fill="url(#hero-ceramic)" stroke="#897033" stroke-width="1.5" />
+              <path d="M355 159c-15 19-34 38-50 66-28 49-25 109 9 147 11 12 26 17 41 18z" fill="url(#hero-glass)"
+                opacity=".9" />
+              <path d="M355 159c14 18 33 37 50 65 29 49 26 114-10 153-10 11-25 17-40 18z" fill="#080a0e"
+                opacity=".65" />
+              <path d="M355 165v238" stroke="#f3dfa0" stroke-opacity=".8" stroke-width="2" />
+              <path d="M320 365c-24-36-23-83-2-119 12-22 25-35 37-50" fill="none" stroke="#f4df9a" stroke-opacity=".7"
+                stroke-width="2" />
+              <path d="M390 365c24-36 23-83 2-119-12-22-25-35-37-50" fill="none" stroke="#e4c96a" stroke-opacity=".44"
+                stroke-width="1.5" />
+              <path d="M326 216 355 196l29 20-29 19z" fill="url(#hero-metal)" stroke="#f6e7b6" stroke-opacity=".72" />
+              <path d="m326 216 29 19v17l-29-20z" fill="#806321" />
+              <path d="m384 216-29 19v17l29-20z" fill="#c9a227" />
+              <circle cx="355" cy="243" r="4" fill="#fff0be" />
+            </g>
+
+            <g fill="#e4c96a">
+              <circle cx="267" cy="157" r="2.2" opacity=".72" />
+              <circle cx="461" cy="219" r="1.8" opacity=".6" />
+              <circle cx="261" cy="330" r="1.5" opacity=".46" />
+              <circle cx="453" cy="387" r="2" opacity=".58" />
+              <circle cx="424" cy="135" r="1.4" opacity=".45" />
+            </g>
+          </svg>
+          <canvas id="hero-canvas" class="hero__canvas" aria-hidden="true"></canvas>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================================================
+         3. TERMÉKKATEGÓRIÁK  (3. fázis)
+         Kategóriaválasztó blokk (chips/kártyák). JS generálja.
+         ========================================================================== -->
+    <section id="categories" class="section categories">
+      <div class="categories__inner">
+        <header class="categories__header section-head">
+          <p class="eyebrow">TALÁLD MEG A SAJÁT UTAD</p>
+          <h2 class="categories__title">Mit szeretnél készíttetni?</h2>
+          <p class="categories__intro">
+            Válassz kész 3D-nyomtatott terméket, rendelj egyedi gyártást, vagy indulj saját modelledből, ötletedből vagy
+            fényképedből.
+          </p>
+        </header>
+
+        <div class="categories__grid">
+          <article class="categories__card" data-category="Kész 3D termékek" role="button" tabindex="0"
+            aria-pressed="false">
+            <div class="categories__visual">
+              <svg class="categories__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <path d="M8 21h32v20H8zM5 15h38v7H5zM24 15v26" />
+                <path d="M24 15c-2-9-13-10-13-4 0 5 8 5 13 4Zm0 0c2-9 13-10 13-4 0 5-8 5-13 4Z" />
+              </svg>
+            </div>
+            <h3 class="categories__name">3D termékkoncepciók</h3>
+            <p class="categories__description">Fedezd fel 3D termékkoncepcióinkat; az oldalon a termékek és a rendelési lehetőségek bemutató jellegűek.</p>
+          </article>
+
+          <article class="categories__card" data-category="Egyedi termékek" role="button" tabindex="0"
+            aria-pressed="false">
+            <div class="categories__visual">
+              <svg class="categories__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <path d="m24 5 18 10v18L24 43 6 33V15L24 5Z" />
+                <path d="m6 15 18 11 18-11M24 26v17M15 10l18 11v9" />
+              </svg>
+            </div>
+            <h3 class="categories__name">Egyedi termékek</h3>
+            <p class="categories__description">Egyedi igényre készülő tárgyak, előzetes egyeztetéssel és ajánlat
+              alapján.</p>
+          </article>
+
+          <article class="categories__card" data-category="Saját 3D modell" role="button" tabindex="0"
+            aria-pressed="false">
+            <div class="categories__visual">
+              <svg class="categories__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <circle cx="24" cy="24" r="6" />
+                <ellipse cx="24" cy="24" rx="19" ry="9" transform="rotate(-35 24 24)" />
+                <path d="M24 5v5m0 28v5M5 24h5m28 0h5" />
+                <circle class="categories__icon-dot" cx="38" cy="13" r="2.5" />
+              </svg>
+            </div>
+            <h3 class="categories__name">Saját 3D modell</h3>
+            <p class="categories__description">Saját modelled gyártásához egyedi ajánlat kérhető; válaszd ki a modellt,
+              és add meg a gyártás részleteit.</p>
+          </article>
+
+          <article class="categories__card" data-category="Egyedi ötlet / fénykép" role="button" tabindex="0"
+            aria-pressed="false">
+            <div class="categories__visual">
+              <svg class="categories__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+                <path d="M9 40V23a15 15 0 0 1 30 0v17M16 40V24a8 8 0 0 1 16 0v16M7 40h34" />
+                <path d="M24 9v7m-7 8h14" />
+              </svg>
+            </div>
+            <h3 class="categories__name">Egyedi ötlet / fénykép</h3>
+            <p class="categories__description">A fénykép vagy leírás az egyedi egyeztetés kiindulópontja; nem jelent
+              automatikus 3D-modell-készítést.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <p class="custom-order__demo-note" role="note">
+      A LUMEN bemutató webáruház-prototípus. A termékek, árak és funkciók demonstrációs célt szolgálnak; a kosár és az ajánlatkérő felület jelenleg nem indít tényleges rendelést vagy adatküldést.
+    </p>
+
+    <!-- ==========================================================================
+         4. TERMÉKLISTA + 5. KERESÉS ÉS SZŰRÉS  (3. fázis)
+         Keresőmező, szűrők, majd a termékkártyák rácsa. JS generálja.
+         ========================================================================== -->
+    <section id="products" class="section products" aria-labelledby="products-title">
+      <!-- TODO (3. fázis): kereső + szűrők + termékkártyák rácsa -->
+    </section>
+
+    <section id="custom-order" class="section custom-order" aria-labelledby="custom-order-title">
+      <div class="custom-order__inner">
+        <header class="custom-order__header section-head">
+          <p class="eyebrow">EGYEDI GYÁRTÁS</p>
+          <h2 id="custom-order-title">Készítsük el az elképzelésedet</h2>
+          <p>
+            Legyen szó saját 3D modellről, egyedi ötletről vagy egy különleges tárgyról, küldd el az elképzelésedet,
+            és egyeztessünk a megvalósításról.
+          </p>
+        </header>
+
+        <div class="custom-order__options" aria-label="Válassz ajánlatkérési lehetőséget">
+          <article class="custom-order__card">
+            <span class="custom-order__number" aria-hidden="true">01</span>
+            <h3>Saját 3D modell</h3>
+            <p>Töltsd fel saját 3D modelledet, és kérj ajánlatot a gyártására.</p>
+            <button class="btn btn--ghost" type="button" data-custom-order-type="Saját 3D modell"
+              aria-controls="custom-order-form" aria-expanded="false">Saját modellből kérek ajánlatot</button>
+          </article>
+          <article class="custom-order__card">
+            <span class="custom-order__number" aria-hidden="true">02</span>
+            <h3>Egyedi ötlet / fénykép</h3>
+            <p>Mutasd meg, mit szeretnél megvalósítani egy fényképpel vagy rövid leírással.</p>
+            <button class="btn btn--ghost" type="button" data-custom-order-type="Egyedi ötlet / fénykép"
+              aria-controls="custom-order-form" aria-expanded="false">Elküldöm az ötletemet</button>
+          </article>
+          <article class="custom-order__card">
+            <span class="custom-order__number" aria-hidden="true">03</span>
+            <h3>Egyedi termék</h3>
+            <p>Ha személyre szabott tárgyat szeretnél, add meg az elképzeléseidet és a fontosabb részleteket.</p>
+            <button class="btn btn--ghost" type="button" data-custom-order-type="Egyedi termék"
+              aria-controls="custom-order-form" aria-expanded="false">Egyedi terméket kérek</button>
+          </article>
+          <article class="custom-order__card custom-order__card--general">
+            <span class="custom-order__number" aria-hidden="true">04</span>
+            <h3>Más elképzelésed van?</h3>
+            <p>Kérj általános ajánlatot, és írd le az űrlapon, miben segíthetünk.</p>
+            <button class="btn btn--primary" type="button" data-custom-order-type="Általános ajánlatkérés" aria-controls="custom-order-form"
+              aria-expanded="false">Egyedi ajánlatot kérek</button>
+          </article>
+        </div>
+
+        <section id="custom-order-form" class="custom-order__form-panel" aria-labelledby="custom-order-form-title"
+          hidden>
+          <header class="custom-order__form-header">
+            <div class="custom-order__form-header-content">
+              <div class="custom-order__form-title-row">
+                <p class="eyebrow">AJÁNLATKÉRÉS</p>
+                <button class="custom-order__close" type="button" data-custom-order-close
+                  aria-label="Ajánlatkérő űrlap bezárása">
+                  <span aria-hidden="true">×</span>
+                  <span>Bezárás</span>
+                </button>
+              </div>
+              <h3 id="custom-order-form-title">Mondd el, mire van szükséged</h3>
+              <p>A mezőket kitöltve bemutató módban ellenőrizheted az ajánlatkérő felületet.</p>
+            </div>
+          </header>
+          <form data-custom-order-form novalidate>
+            <div class="custom-order__fields">
+              <div class="custom-order__field">
+                <label for="custom-order-name">Név <span aria-hidden="true">*</span></label>
+                <input id="custom-order-name" name="name" type="text" autocomplete="name" required
+                  aria-describedby="custom-order-name-error" />
+                <p class="custom-order__error" id="custom-order-name-error" data-error-for="name" aria-live="polite">
+                </p>
+              </div>
+              <div class="custom-order__field">
+                <label for="custom-order-email">E-mail <span aria-hidden="true">*</span></label>
+                <input id="custom-order-email" name="email" type="email" autocomplete="email" required
+                  aria-describedby="custom-order-email-error" />
+                <p class="custom-order__error" id="custom-order-email-error" data-error-for="email" aria-live="polite">
+                </p>
+              </div>
+              <div class="custom-order__field">
+                <label for="custom-order-phone">Telefonszám <span>(opcionális)</span></label>
+                <input id="custom-order-phone" name="phone" type="tel" autocomplete="tel" />
+              </div>
+              <div class="custom-order__field">
+                <label for="custom-order-type">Kérés típusa <span aria-hidden="true">*</span></label>
+                <select id="custom-order-type" name="requestType" required aria-describedby="custom-order-type-error">
+                  <option value="">Válassz típust</option>
+                  <option value="Saját 3D modell">Saját 3D modell</option>
+                  <option value="Egyedi ötlet / fénykép">Egyedi ötlet / fénykép</option>
+                  <option value="Egyedi termék">Egyedi termék</option>
+                  <option value="Általános ajánlatkérés">Általános ajánlatkérés</option>
+                </select>
+                <p class="custom-order__error" id="custom-order-type-error" data-error-for="requestType"
+                  aria-live="polite"></p>
+              </div>
+              <div class="custom-order__field custom-order__field--wide">
+                <label for="custom-order-product-name">Termék, amelyre ajánlatot kérek</label>
+                <input id="custom-order-product-name" name="product-name" type="text" value="" readonly />
+                <input id="custom-order-product-id" name="productId" type="hidden" value="" />
+              </div>
+              <div class="custom-order__field custom-order__field--wide">
+                <label for="custom-order-description">Rövid leírás <span aria-hidden="true">*</span></label>
+                <textarea id="custom-order-description" name="description" rows="4" required
+                  aria-describedby="custom-order-description-error"></textarea>
+                <p class="custom-order__error" id="custom-order-description-error" data-error-for="description"
+                  aria-live="polite"></p>
+              </div>
+              <div class="custom-order__field">
+                <label for="custom-order-size">Kívánt méret <span>(opcionális)</span></label>
+                <input id="custom-order-size" name="size" type="text" />
+              </div>
+              <div class="custom-order__field">
+                <label for="custom-order-quantity">Darabszám <span aria-hidden="true">*</span></label>
+                <input id="custom-order-quantity" name="quantity" type="number" min="1" step="1" inputmode="numeric"
+                  required aria-describedby="custom-order-quantity-error" />
+                <p class="custom-order__error" id="custom-order-quantity-error" data-error-for="quantity"
+                  aria-live="polite"></p>
+              </div>
+              <div class="custom-order__field custom-order__field--wide" data-model-upload hidden>
+                <label for="custom-order-model">3D modell fájl</label>
+                <input id="custom-order-model" name="modelFile" type="file" accept=".stl,.3mf,.obj"
+                  aria-describedby="custom-order-model-help custom-order-model-file custom-order-model-error" />
+                <p class="custom-order__help" id="custom-order-model-help">Elfogadott formátumok: STL, 3MF, OBJ. A fájl
+                  csak a böngészőben kerül kiválasztásra.</p>
+                <p class="custom-order__file" id="custom-order-model-file" data-file-for="modelFile" aria-live="polite">
+                </p>
+                <p class="custom-order__error" id="custom-order-model-error" data-error-for="modelFile"
+                  aria-live="polite"></p>
+              </div>
+              <div class="custom-order__field custom-order__field--wide" data-image-upload hidden>
+                <label for="custom-order-image">Kép feltöltése</label>
+                <input id="custom-order-image" name="imageFile" type="file" accept=".jpg,.jpeg,.png,.webp"
+                  aria-describedby="custom-order-image-help custom-order-image-file custom-order-image-error" />
+                <p class="custom-order__help" id="custom-order-image-help">Elfogadott formátumok: JPG, PNG, WEBP. A kép
+                  csak a böngészőben kerül kiválasztásra.</p>
+                <p class="custom-order__file" id="custom-order-image-file" data-file-for="imageFile" aria-live="polite">
+                </p>
+                <p class="custom-order__error" id="custom-order-image-error" data-error-for="imageFile"
+                  aria-live="polite"></p>
+              </div>
+              <div class="custom-order__field custom-order__field--wide">
+                <label for="custom-order-note">Megjegyzés <span>(opcionális)</span></label>
+                <textarea id="custom-order-note" name="note" rows="3"></textarea>
+              </div>
+            </div>
+            <p class="custom-order__demo-note" role="note">
+              Bemutató mód: az űrlap adatait vagy kiválasztott fájlokat nem küldjük el és nem tároljuk.
+            </p>
+            <button class="btn btn--primary btn--lg" type="submit" data-custom-order-submit disabled>
+              Ajánlatkérés ellenőrzése
+            </button>
+            <p class="custom-order__status" data-custom-order-status role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ==========================================================================
+       10. LÁBLÉC
+       ========================================================================== -->
+  <footer id="site-footer" class="site-footer">
+    <div class="site-footer__inner">
+
+      <div class="site-footer__brand">
+        <a class="site-footer__logo" href="#hero" aria-label="LUMEN — kezdőlap">LUMEN</a>
+        <p>Gondosan megtervezett 3D-nyomtatott tárgyak és egyedi alkotások, amelyek fényt és karaktert visznek a
+          mindennapokba.</p>
+      </div>
+
+      <div class="site-footer__cols">
+
+        <nav class="site-footer__col" aria-label="Lábléc navigáció">
+          <h2>Felfedezés</h2>
+          <ul>
+            <li><a href="#hero">Kezdőlap</a></li>
+            <li><a href="#products">Termékek</a></li>
+            <li><a href="#site-footer">Kapcsolat</a></li>
+          </ul>
+        </nav>
+
+        <section class="site-footer__col" aria-labelledby="footer-information-title">
+          <h2 id="footer-information-title">Információk</h2>
+          <!-- TODO: A tájékoztató oldalak elkészültekor cseréld ezeket működő belső hivatkozásokra. -->
+          <ul>
+            <li><span>Szállítás és fizetés</span></li>
+            <li><span>GYIK</span></li>
+            <li><span>Adatkezelési tájékoztató</span></li>
+            <li><span>Általános szerződési feltételek</span></li>
+          </ul>
+        </section>
+
+        <section class="site-footer__col" aria-labelledby="footer-contact-title">
+          <h2 id="footer-contact-title">Kapcsolat</h2>
+          <p class="site-footer__contact-note">Közvetlen elérhetőségi adat jelenleg nincs megadva.</p>
+        </section>
+      </div>
+
+      <div class="site-footer__bottom">
+        <span>© <time data-current-year datetime="2026">2026</time> LUMEN. Minden jog fenntartva.</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    const currentYear = new Date().getFullYear();
+    const currentYearElement = document.querySelector("[data-current-year]");
+    currentYearElement.textContent = currentYear;
+    currentYearElement.dateTime = String(currentYear);
+  </script>
+
+
+  <!-- ==========================================================================
+       OVERLAY RÉTEGEK — egyelőre üres, rejtett konténerek
+       A tartalmukat JavaScript tölti fel és nyitja meg:
+         #cart-drawer    : jobbról beúszó KOSÁR panel (4. fázis)
+         #product-modal  : termék RÉSZLETES NÉZET + nagy 3D (5-6. fázis)
+         #toast          : rövid felugró visszajelzés, pl. "Kosárba téve" (4. fázis)
+       ========================================================================== -->
+  <aside id="cart-drawer" class="cart-drawer" aria-label="Bevásárlókosár" hidden>
+    <!-- TODO (4. fázis): kosár tételek + összegzés -->
+  </aside>
+
+  <div id="product-modal" class="modal" role="dialog" aria-modal="true" hidden>
+    <!-- TODO (5-6. fázis): részletes nézet + interaktív 3D modell -->
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+
+  <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

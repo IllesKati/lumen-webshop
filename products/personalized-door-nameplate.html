@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Egyedi névtábla / ajtótábla | LUMEN – 3D nyomtatott termékek</title>
+    <meta name="description"
+        content="Ismerd meg a LUMEN személyre szabható, 3D-nyomtatott névtábláját ajtóra vagy falra. Koncepciókép, tájékoztató ár: 6 990 Ft." />
+
+    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../favicon-16.png" type="image/png" sizes="16x16" />
+    <link rel="icon" href="../favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="../favicon.png" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" sizes="180x180" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="../css/main.css" />
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+
+<body>
+    <a href="#main" class="visually-hidden">Ugrás a tartalomra</a>
+
+    <header id="site-header" class="site-header" data-header>
+        <div class="site-header__inner container">
+            <a href="../index.html#hero" class="site-header__logo" aria-label="LUMEN — kezdőlap">
+                LUMEN
+            </a>
+
+            <button type="button" class="site-header__icon-btn site-header__menu-toggle" data-menu-toggle
+                aria-label="Menü megnyitása" aria-expanded="false" aria-controls="site-navigation">
+                <svg class="site-header__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path class="site-header__menu-line site-header__menu-line--top" d="M4 7h16" />
+                    <path class="site-header__menu-line site-header__menu-line--middle" d="M4 12h16" />
+                    <path class="site-header__menu-line site-header__menu-line--bottom" d="M4 17h16" />
+                </svg>
+            </button>
+
+            <nav id="site-navigation" class="site-header__nav" aria-label="Főmenü">
+                <ul class="site-header__menu">
+                    <li><a href="../index.html#products" class="site-header__link">Termékek</a></li>
+                    <li><a href="../index.html#categories" class="site-header__link">Kategóriák</a></li>
+                    <li><a href="../index.html#hero" class="site-header__link">Kezdőlap</a></li>
+                    <li><a href="../index.html#site-footer" class="site-header__link">Kapcsolat</a></li>
+                </ul>
+            </nav>
+
+            <div class="site-header__actions">
+                <a class="site-header__icon-btn" href="../index.html#products" aria-label="Termékek keresése">
+                    <svg class="site-header__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" />
+                        <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" />
+                    </svg>
+                </a>
+                <button type="button" class="site-header__icon-btn" data-cart-toggle
+                    aria-label="Bevásárlókosár megnyitása">
+                    <svg class="site-header__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="M4 5h2l2.2 10.2a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.5-1.2L21 8H7" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="10" cy="20" r="1.4" fill="currentColor" />
+                        <circle cx="18" cy="20" r="1.4" fill="currentColor" />
+                    </svg>
+                    <span class="site-header__cart-count" data-cart-count hidden>0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <section class="section product-detail" aria-labelledby="product-name">
+            <div class="container product-detail__container">
+                <div class="product-detail__layout">
+                    <figure class="product-detail__visual">
+                        <div class="product-detail__image-frame">
+                            <img class="product-detail__image"
+                                src="../assets/images/products/personalized-door-nameplate.jpg"
+                                alt="Egyedi névtábla és ajtótábla koncepcióképe" fetchpriority="high" />
+                        </div>
+                        <figcaption class="product-detail__caption">
+                            A megjelenített kép koncepciókép; nem tekinthető a legyártott termék műszaki
+                            specifikációjának.
+                        </figcaption>
+                    </figure>
+
+                    <article class="product-detail__info" data-product-id="gift-ceramic-vase">
+                        <a class="site-header__icon-btn product-detail__back" href="../index.html"
+                            aria-label="Vissza a főoldalra"><span aria-hidden="true">×</span></a>
+                        <div class="product-detail__content">
+                            <p class="product-detail__category">3D termékkoncepciók</p>
+                            <h1 id="product-name" class="product-detail__title">Egyedi névtábla / ajtótábla</h1>
+                            <p class="product-detail__description">
+                                Adj személyes hangsúlyt az ajtónak vagy a falnak egy egyedi feliratú névtáblával. A
+                                felirat részleteit egyeztetés alapján pontosítjuk — kérj ajánlatot az elképzelésedre.
+                            </p>
+                        </div>
+
+                        <div class="product-detail__purchase">
+                            <p class="product-detail__price">
+                                <span class="product-detail__price-label">Tájékoztató ár</span>
+                                <data value="6990">6 990 Ft</data>
+                            </p>
+                            <div class="product-detail__actions">
+                                <a class="btn btn--primary btn--lg product-detail__button"
+                                    href="../index.html?quoteProduct=gift-ceramic-vase#custom-order">Ajánlatot kérek</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="site-footer" class="site-footer">
+        <div class="site-footer__inner">
+            <div class="site-footer__brand">
+                <a class="site-footer__logo" href="../index.html#hero" aria-label="LUMEN — kezdőlap">LUMEN</a>
+                <p>Gondosan megtervezett 3D-nyomtatott tárgyak és egyedi alkotások, amelyek fényt és karaktert visznek a
+                    mindennapokba.</p>
+            </div>
+
+            <div class="site-footer__cols">
+                <nav class="site-footer__col" aria-label="Lábléc navigáció">
+                    <h2>Felfedezés</h2>
+                    <ul>
+                        <li><a href="../index.html#hero">Kezdőlap</a></li>
+                        <li><a href="../index.html#products">Termékek</a></li>
+                        <li><a href="../index.html#site-footer">Kapcsolat</a></li>
+                    </ul>
+                </nav>
+
+                <section class="site-footer__col" aria-labelledby="footer-information-title">
+                    <h2 id="footer-information-title">Információk</h2>
+                    <ul>
+                        <li><span>Szállítás és fizetés</span></li>
+                        <li><span>GYIK</span></li>
+                        <li><span>Adatkezelési tájékoztató</span></li>
+                        <li><span>Általános szerződési feltételek</span></li>
+                    </ul>
+                </section>
+
+                <section class="site-footer__col" aria-labelledby="footer-contact-title">
+                    <h2 id="footer-contact-title">Kapcsolat</h2>
+                    <p class="site-footer__contact-note">Közvetlen elérhetőségi adat jelenleg nincs megadva.</p>
+                </section>
+            </div>
+
+            <div class="site-footer__bottom">
+                <span>© <time datetime="2026">2026</time> LUMEN. Minden jog fenntartva.</span>
+            </div>
+        </div>
+    </footer>
+
+    <aside id="cart-drawer" class="cart-drawer" aria-label="Bevásárlókosár" hidden></aside>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="../js/main.js"></script>
+</body>
+
+</html>

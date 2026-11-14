@@ -1,0 +1,14 @@
+/* ==========================================================================
+   layout/_grid.css — ÁLTALÁNOS ELRENDEZÉS ÉS RÁCSOK
+   ========================================================================== */
+
+.products__grid {
+   display: grid;
+   grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+   gap: var(--space-6);
+
+   width: 100%;
+   max-width: var(--container-max);
+   margin-inline: auto;
+   padding-inline: var(--space-4);
+}

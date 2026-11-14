@@ -1,0 +1,161 @@
+/* ==========================================================================
+   components/_buttons.css — ÁLTALÁNOS GOMB KOMPONENS
+   --------------------------------------------------------------------------
+   ÁLLAPOT: 1. fázis — KÉSZ (a projekt általános gombstílusai).
+
+   Ez a fájl a webshop ÚJRAHASZNÁLHATÓ gombjait definiálja. Egy alap osztály
+   (.btn) adja a közös "csontvázat" (méret, térköz, animáció), a módosítók
+   (.btn--primary, --ghost, --danger) pedig a színt/hangsúlyt.
+
+   HASZNÁLAT a HTML-ben:
+     <a class="btn btn--primary" href="#products">Vásárlás</a>
+     <button class="btn btn--ghost" type="button">Részletek</button>
+     <button class="btn btn--danger btn--sm" type="button">Törlés</button>
+
+   DIZÁJN: sötét-elegáns, prémium. Az elsődleges gomb arany (a márka fő
+   akcentusa), a másodlagos visszafogott, áttetsző-körvonalas.
+
+   FONTOS: a fejléc kör alakú ikon-gombjai (.site-header__icon-btn) KÜLÖN
+   komponens, a layout/_header.css-ben él — itt szándékosan NEM definiáljuk
+   újra és nem írjuk felül.
+
+   MOBILE-FIRST: az alap méret mobilon is kényelmes (min. 44px magas érintési
+   cél), a nagyobb méretek felfelé skálázódnak a módosítókkal.
+
+   Minden szín, méret és animációs idő a base/_variables.css tokenjeiből jön.
+   ========================================================================== */
+
+
+/* --- 1. ALAP GOMB (.btn) — a közös csontváz ----------------------------- */
+
+.btn {
+   /* A gomb inline-flex: a tartalom (szöveg + ikon) egy sorban, középen */
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: var(--space-2);
+
+   /* Mobilon kényelmes érintési cél (min. ~44px magasság) */
+   min-height: 44px;
+   padding: var(--space-3) var(--space-6);
+
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   font-weight: 600;
+   line-height: 1;
+   letter-spacing: 0.02em;
+   text-align: center;
+   white-space: nowrap;
+
+   /* Alap: áttetsző háttér + finom körvonal (a módosítók írják felül) */
+   color: var(--color-text);
+   background-color: transparent;
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-pill);
+
+   cursor: pointer;
+   user-select: none;
+   -webkit-tap-highlight-color: transparent;
+
+   /* Finom, gyors animáció minden vizuális váltásra */
+   transition: color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+}
+
+/* Active: enyhe "benyomás" érzet — a gomb kicsit összehúzódik */
+.btn:active {
+   transform: translateY(1px) scale(0.99);
+}
+
+/* Billentyűzetes fókusz: jól látható arany keret (akadálymentesség).
+   Csak :focus-visible — egérkattintásnál nem villan fel a keret. */
+.btn:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+}
+
+/* Letiltott állapot: halvány, nem kattintható, nincs hover */
+.btn:disabled,
+.btn[aria-disabled="true"] {
+   opacity: 0.45;
+   cursor: not-allowed;
+   pointer-events: none;
+   transform: none;
+   box-shadow: none;
+}
+
+
+/* --- 2. ELSŐDLEGES GOMB (.btn--primary) — arany CTA --------------------- */
+
+.btn--primary {
+   color: var(--color-bg);
+   background-color: var(--color-accent);
+   border-color: var(--color-accent);
+   box-shadow: var(--shadow-sm);
+}
+
+.btn--primary:hover {
+   background-color: var(--color-accent-soft);
+   border-color: var(--color-accent-soft);
+   box-shadow: var(--shadow-md), var(--glow-accent);
+}
+
+
+/* --- 3. MÁSODLAGOS GOMB (.btn--ghost) — visszafogott -------------------- */
+
+.btn--ghost {
+   color: var(--color-text-muted);
+   background-color: transparent;
+   border-color: var(--color-border);
+}
+
+.btn--ghost:hover {
+   color: var(--color-text);
+   background-color: var(--color-surface-2);
+   border-color: var(--color-accent);
+}
+
+
+/* --- 4. VESZÉLYES GOMB (.btn--danger) ----------------------------------- */
+
+.btn--danger {
+   color: var(--color-text);
+   background-color: transparent;
+   border-color: var(--color-danger);
+}
+
+.btn--danger:hover {
+   color: var(--color-bg);
+   background-color: var(--color-danger);
+   border-color: var(--color-danger);
+   box-shadow: var(--shadow-sm);
+}
+
+
+/* --- 5. MÉRETVÁLTOZATOK ------------------------------------------------- */
+
+/* Kis gomb: kompakt, pl. táblázatban vagy kártyán belül */
+.btn--sm {
+   min-height: 36px;
+   padding: var(--space-2) var(--space-4);
+   font-size: var(--fs-xs);
+}
+
+/* Nagy gomb: hangsúlyos CTA-khoz (pl. hero) */
+.btn--lg {
+   min-height: 52px;
+   padding: var(--space-4) var(--space-8);
+   font-size: var(--fs-body);
+}
+
+
+/* --- 6. BLOKK-IGAZÍTÁS -------------------------------------------------- */
+
+/* Teljes szélességű gomb (pl. űrlapon belül, mobilon) */
+.btn--block {
+   display: flex;
+   width: 100%;
+}

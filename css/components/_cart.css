@@ -1,0 +1,542 @@
+/* ==========================================================================
+   components/_cart.css — KOSÁR PANEL (CART DRAWER)
+   --------------------------------------------------------------------------
+   ÁLLAPOT: 4. fázis — KÉSZ (kosár panel megjelenése).
+
+   Az oldalról JOBBRÓL beúszó kosár-panel (drawer) stílusai: fejléc a címmel
+   és a bezáró gombbal, a kiválasztott termékek listája (kép, név, ár,
+   darabszám, törlés), az üres kosár jelzése, majd alul az összegzés és a
+   "Megrendelés" akciógomb.
+
+   HOGYAN KAPCSOLÓDIK A HTML-HEZ (index.html, 4. fázisban JS tölti fel):
+     <aside id="cart-drawer" class="cart-drawer" aria-label="Bevásárlókosár" hidden>
+       <header class="cart-drawer__header">
+         <h2 class="cart-drawer__title">Kosár</h2>
+         <button class="cart-drawer__close" type="button" aria-label="Bezárás"></button>
+       </header>
+       <div class="cart-drawer__body">
+         <ul class="cart-drawer__items">
+           <li class="cart-drawer__item">
+             <img class="cart-drawer__item-image" src="..." alt="...">
+             <div class="cart-drawer__item-content">
+               <p class="cart-drawer__item-title">Termék neve</p>
+               <p class="cart-drawer__item-price">39 990 Ft</p>
+               <div class="cart-drawer__item-quantity">...</div>
+             </div>
+             <button class="cart-drawer__item-remove" type="button" aria-label="Törlés"></button>
+           </li>
+         </ul>
+         <p class="cart-drawer__empty" hidden>Üres a kosár.</p>
+       </div>
+       <footer class="cart-drawer__footer">
+         <p class="cart-drawer__subtotal"><span>Összesen</span><strong>39 990 Ft</strong></p>
+         <div class="cart-drawer__actions">
+           <button class="btn btn--primary btn--block" type="button">Megrendelés</button>
+         </div>
+       </footer>
+     </aside>
+
+   FONTOS — MI NINCS EBBEN A FÁJLBAN (szándékosan):
+     - A darabszám-állító gombok és az akciógombok KINÉZETÉT a
+       components/_buttons.css adja (.btn, .btn--primary, .btn--sm ...).
+       Itt csak az ELRENDEZÉSÜKET és a méretüket hangoljuk.
+     - A háttér-görgetés tiltása: azt JAVASCRIPT fogja intézni (a <body>
+       osztályával) — ezért itt NEM használunk overflow: hidden-t a body-n.
+     - A kártya/modal komponensekkel való összhang (felület, keret, árnyék,
+       akcentszín) a base/_variables.css tokenjein keresztül valósul meg.
+
+   MOBILE-FIRST: mobilon a panel gyakorlatilag teljes szélességű; 640px-től
+   fix, kényelmes szélességű, jobbról becsúszó panel. Az animáció kizárólag
+   transform + opacity alapú (GPU-barát, nem ugrik a layout).
+
+   Minden szín, méret, térköz és animációs idő a base/_variables.css
+   tokenjeiből jön.
+   ========================================================================== */
+
+
+/* --- 1. A PANEL GYÖKERE (.cart-drawer) ---------------------------------- */
+
+.cart-drawer {
+   /* Rögzítve a képernyő jobb széléhez, teljes magasságban. */
+   position: fixed;
+   inset-block: 0;
+   inset-inline-end: 0;
+   z-index: var(--z-drawer);
+
+   /* Mobilon: gyakorlatilag teljes szélesség — csak egy keskeny sáv
+      marad látható a mögötte lévő tartalomból. */
+   width: min(100%, 420px);
+   max-width: 100vw;
+   height: 100%;
+   height: 100dvh;
+   /* dvh: a mobil böngészők dinamikus eszközsávjával is helyes magasság
+      (a 100% a régi böngészők tartaléka) */
+
+   /* Függőleges elrendezés: fejléc felül, görgethető törzs, lábléc alul */
+   display: flex;
+   flex-direction: column;
+
+   overflow: hidden;
+   /* a lekerekített sarkok és a belső görgetés miatt */
+
+   color: var(--color-text);
+   background-color: var(--color-surface);
+   border-inline-start: 1px solid var(--color-border);
+   box-shadow: var(--shadow-lg);
+
+   /* Belépő/kilépő animáció: a panel kívülről csúszik be. */
+   opacity: 0;
+   transform: translateX(100%);
+   transition: transform var(--dur-base) var(--ease-out),
+      opacity var(--dur-base) var(--ease-out),
+      visibility 0s linear var(--dur-base);
+   /* láthatóság a csúszás végén vált (kilépésnél) */
+
+   visibility: hidden;
+}
+
+/* NYITOTT állapot: a JS a .is-open (vagy .cart-drawer--open) osztályt teszi rá.
+   Ilyenkor a panel 0-ra úszik be, és láthatóvá válik. */
+.cart-drawer.is-open,
+.cart-drawer.cart-drawer--open,
+.cart-drawer[aria-hidden="false"],
+.cart-drawer:not([hidden]) {
+   opacity: 1;
+   transform: translateX(0);
+   visibility: visible;
+   transition: transform var(--dur-base) var(--ease-out),
+      opacity var(--dur-base) var(--ease-out),
+      visibility 0s linear 0s;
+}
+
+/* A panelen belüli kattintható elemek mutató kurzort kapnak. */
+.cart-drawer :is(a, button) {
+   cursor: pointer;
+}
+
+/* --- HÁTTÉR-OVERLAY (opcionális; a JS teszi be/le és nyitja) -------------
+   Csak megjelenés: elsötétítés + finom elmosás. A görgetés-tiltás a JS dolga. */
+.cart-drawer__overlay,
+.cart-overlay {
+   position: fixed;
+   inset: 0;
+   z-index: calc(var(--z-drawer) - 1);
+   /* a panel mögött, de minden más előtt */
+
+   background-color: rgb(0 0 0 / 0.6);
+   backdrop-filter: blur(4px);
+
+   opacity: 0;
+   visibility: hidden;
+   transition: opacity var(--dur-base) var(--ease-out),
+      visibility 0s linear var(--dur-base);
+}
+
+/* Nyitott overlay: a JS ugyanazt az osztályt teszi rá, mint a panelre. */
+.cart-overlay.is-open,
+.cart-overlay.cart-drawer--open,
+.cart-drawer__overlay.is-open,
+.cart-drawer__overlay.cart-drawer--open {
+   opacity: 1;
+   visibility: visible;
+   transition: opacity var(--dur-base) var(--ease-out),
+      visibility 0s linear 0s;
+}
+
+
+/* --- 2. FEJLÉC (.cart-drawer__header) ----------------------------------- */
+
+.cart-drawer__header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: var(--space-4);
+   flex: 0 0 auto;
+   /* a fejléc ne nyúljon/ne zsugorodjon */
+
+   padding: var(--space-4) var(--space-6);
+   border-bottom: 1px solid var(--color-border);
+   background-color: var(--color-surface-2);
+}
+
+/* Cím: display betűtípus, hangsúlyos de nem túl nagy */
+.cart-drawer__title {
+   font-family: var(--font-display);
+   font-size: var(--fs-h3);
+   font-weight: 600;
+   line-height: var(--lh-tight);
+   letter-spacing: -0.01em;
+   color: var(--color-text);
+}
+
+/* Bezáró gomb: kör alakú, kényelmes érintési cél (min. 44px).
+   A kinézetét itt adjuk meg, mert ez a panel-specifikus ikon-gomb. */
+.cart-drawer__close {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   flex: 0 0 auto;
+   width: 44px;
+   height: 44px;
+   padding: 0;
+
+   color: var(--color-text-muted);
+   background-color: transparent;
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-pill);
+
+   transition: color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+}
+
+.cart-drawer__close:hover {
+   color: var(--color-text);
+   background-color: var(--color-surface);
+   border-color: var(--color-accent);
+}
+
+.cart-drawer__close:active {
+   transform: translateY(1px) scale(0.98);
+}
+
+.cart-drawer__close:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+}
+
+/* Az ikon méretezése a bezáró gombon belül */
+.cart-drawer__close>svg,
+.cart-drawer__close>.icon {
+   width: 20px;
+   height: 20px;
+}
+
+
+/* --- 3. GÖRGHETŐ TÖRZS (.cart-drawer__body) ----------------------------- */
+
+.cart-drawer__body {
+   flex: 1 1 auto;
+   /* kitölti a fejléc és a lábléc közti helyet */
+   min-height: 0;
+   /* flex-elemnél ez KELL a belső görgetéshez */
+
+   overflow-y: auto;
+   overscroll-behavior: contain;
+   /* a panelen belüli görgetés ne "szivárogjon" az oldalra */
+
+   padding: var(--space-4) var(--space-6);
+   /* kényelmes görgethető sáv mobilon */
+   -webkit-overflow-scrolling: touch;
+}
+
+
+/* --- 4. TÉTELLISTA (.cart-drawer__items, __item) ------------------------ */
+
+.cart-drawer__items {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-4);
+}
+
+/* Egy kosártétel: kép balra, tartalom középen, törlés jobbra */
+.cart-drawer__item {
+   display: grid;
+   grid-template-columns: 72px 1fr auto;
+   align-items: start;
+   gap: var(--space-4);
+
+   padding: var(--space-3);
+   background-color: var(--color-surface-2);
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-md);
+
+   transition: border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.cart-drawer__item:hover,
+.cart-drawer__item:focus-within {
+   border-color: var(--color-border);
+   background-color: var(--color-surface);
+   box-shadow: var(--shadow-sm);
+}
+
+/* Tétel képe: négyzetes, lekerekített, kivágva */
+.cart-drawer__item-image {
+   width: 72px;
+   height: 72px;
+   object-fit: cover;
+   object-position: center;
+   background-color: var(--color-surface);
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-sm);
+}
+
+/* A tétel szöveges része: függőleges oszlop */
+.cart-drawer__item-content {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-1);
+   min-width: 0;
+   /* hosszú szöveg ne feszítse szét a rácsot */
+}
+
+/* Terméknév: 2 sorra korlátozva, hogy a lista egyenletes maradjon */
+.cart-drawer__item-title {
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   font-weight: 600;
+   line-height: var(--lh-normal);
+   color: var(--color-text);
+
+   display: -webkit-box;
+   -webkit-line-clamp: 2;
+   -webkit-box-orient: vertical;
+   overflow: hidden;
+}
+
+/* A tétel ára: kicsit hangsúlyosabb, akcentszínnel kiemelve */
+.cart-drawer__item-price {
+   font-family: var(--font-display);
+   font-size: var(--fs-sm);
+   font-weight: 700;
+   line-height: var(--lh-tight);
+   color: var(--color-accent);
+}
+
+/* Darabszám-állító sor: a gombok alapstílusa a _buttons.css-ből jön. */
+.cart-drawer__item-quantity {
+   display: inline-flex;
+   align-items: center;
+   gap: var(--space-1);
+   margin-top: var(--space-2);
+   align-self: flex-start;
+}
+
+/* A darabszám kijelzése (szöveg vagy input) */
+.cart-drawer__item-quantity> :is(span, output, input) {
+   min-width: 2.5ch;
+   text-align: center;
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   font-weight: 600;
+   color: var(--color-text);
+}
+
+/* Legalább 44px-es érintési cél a darabszám-állító gomboknak. */
+.cart-drawer__item-quantity .btn {
+   min-height: 44px;
+   min-width: 44px;
+   padding: 0;
+   font-size: var(--fs-sm);
+}
+
+/* Törlés gomb a tétel jobb szélén: visszafogott, hoverre veszélyjelzés */
+.cart-drawer__item-remove {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   align-self: start;
+   width: 44px;
+   height: 44px;
+   padding: 0;
+
+   color: var(--color-text-faint);
+   background-color: transparent;
+   border: 1px solid transparent;
+   border-radius: var(--radius-sm);
+
+   transition: color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+}
+
+.cart-drawer__item-remove:hover {
+   color: var(--color-danger);
+   background-color: var(--color-surface-2);
+   border-color: var(--color-danger);
+}
+
+.cart-drawer__item-remove:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 2px;
+}
+
+
+/* --- 5. ÜRES KOSÁR (.cart-drawer__empty) -------------------------------- */
+
+.cart-drawer__empty {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   gap: var(--space-3);
+   min-height: 240px;
+   padding: var(--space-12) var(--space-6);
+   text-align: center;
+   color: var(--color-text-muted);
+   font-size: var(--fs-sm);
+   line-height: var(--lh-normal);
+}
+
+/* Finom arany ikon-felirat az üres állapothoz */
+.cart-drawer__empty :is(svg, .icon) {
+   width: 48px;
+   height: 48px;
+   color: var(--color-accent);
+   opacity: 0.7;
+}
+
+
+/* --- 6. LÁBLÉC: ÖSSZEGZÉS + AKCIÓK (.cart-drawer__footer) --------------- */
+
+.cart-drawer__footer {
+   flex: 0 0 auto;
+   padding: var(--space-4) var(--space-6) var(--space-6);
+   border-top: 1px solid var(--color-border);
+   background-color: var(--color-surface-2);
+   box-shadow: var(--shadow-md);
+   /* a lábléc elválik a görgethető listától */
+}
+
+/* Kosárösszegzés: a végösszeg külön, hangsúlyos sorban jelenik meg. */
+.cart-drawer__summary {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-3);
+}
+
+.cart-drawer__subtotal--total {
+   margin-top: var(--space-1);
+   padding-top: var(--space-3);
+   border-top: 1px solid var(--color-border);
+   color: var(--color-text);
+}
+
+/* Összegző sor: balra a felirat, jobbra az összeg */
+.cart-drawer__subtotal {
+   display: flex;
+   align-items: baseline;
+   justify-content: space-between;
+   gap: var(--space-4);
+   font-family: var(--font-body);
+   font-size: var(--fs-sm);
+   color: var(--color-text-muted);
+}
+
+.cart-drawer__subtotal strong,
+.cart-drawer__subtotal .cart-drawer__subtotal-value {
+   font-family: var(--font-display);
+   font-size: var(--fs-h3);
+   font-weight: 700;
+   line-height: var(--lh-tight);
+   color: var(--color-text);
+}
+
+/* Akciógombok csoportja: egymás alatt, teljes szélességben */
+.cart-drawer__actions {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-2);
+   margin-top: var(--space-4);
+}
+
+/* A panel gombjai töltsek ki teljes szélességben */
+.cart-drawer__actions .btn {
+   width: 100%;
+}
+
+
+/* --- 7. RESZPONZÍV FINOMHANGOLÁS ---------------------------------------- */
+
+/* Nagy mobil / kis tablet: kicsit levegősebb belső térközök,
+   a panel fix szélességet kap (nem feszül teljes szélességre). */
+@media (min-width: 640px) {
+   .cart-drawer {
+      width: 420px;
+      border-start-start-radius: var(--radius-md);
+      border-end-start-radius: var(--radius-md);
+   }
+
+   .cart-drawer__header {
+      padding: var(--space-6);
+   }
+
+   .cart-drawer__body {
+      padding: var(--space-6);
+   }
+
+   .cart-drawer__footer {
+      padding: var(--space-6) var(--space-6) var(--space-8);
+   }
+}
+
+/* Tablet és feljebb: szélesebb, kényelmesebb panel */
+@media (min-width: 1024px) {
+   .cart-drawer {
+      width: 440px;
+   }
+
+   /* Desktopon a tétel képe nagyobb lehet */
+   .cart-drawer__item {
+      grid-template-columns: 88px 1fr auto;
+   }
+
+   .cart-drawer__item-image {
+      width: 88px;
+      height: 88px;
+   }
+}
+
+/* Széles desktop: kicsit nagyobb panel */
+@media (min-width: 1280px) {
+   .cart-drawer {
+      width: 480px;
+   }
+}
+
+
+/* --- 8. AKADÁLYMENTESSÉG: CSÖKKENTETT MOZGÁS ---------------------------- */
+
+/* Ha a felhasználó kérte a "csökkentett mozgást", a panel és az overlay
+   ne csússzon/ne halványuljon — azonnal jelenjen meg és tűnjön el. */
+@media (prefers-reduced-motion: reduce) {
+
+   .cart-drawer,
+   .cart-drawer__overlay,
+   .cart-overlay {
+      transition: none;
+   }
+
+   .cart-drawer__close,
+   .cart-drawer__item,
+   .cart-drawer__item-image,
+   .cart-drawer__item-title a {
+      transition: none;
+   }
+
+   .cart-drawer__close:active {
+      transform: none;
+   }
+}
+
+
+/* --- 9. KÉNYSZERÍTETT SZÍNEK (kontraszt) ------------------------------- */
+
+/* Nagy kontrasztú módban a panel és a tételek kerete legyen egyértelmű. */
+@media (prefers-contrast: more) {
+
+   .cart-drawer,
+   .cart-drawer__item,
+   .cart-drawer__close,
+   .cart-drawer__item-remove {
+      border-width: 2px;
+      border-style: solid;
+   }
+
+   .cart-drawer__item-remove {
+      border-color: var(--color-border);
+   }
+}

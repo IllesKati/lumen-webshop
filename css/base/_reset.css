@@ -1,0 +1,108 @@
+/* ==========================================================================
+   _reset.css — BÖNGÉSZŐ-ALAPÉRTELMEZÉSEK NULLÁZÁSA
+   --------------------------------------------------------------------------
+   Minden böngésző (Chrome, Firefox, Safari) kicsit máshogy jelenít meg
+   dolgokat (margók, betűméretek). Ez a fájl "lenullázza" ezeket, hogy a
+   kiindulópont mindenhol ugyanaz legyen. Ez az alapja a kiszámítható
+   reszponzív elrendezésnek.
+   ========================================================================== */
+
+/* *, *::before, *::after = MINDEN elemre érvényes szabály.
+   A box-sizing: border-box azt jelenti, hogy a padding és border
+   beleszámít az elem szélességébe — így nem "csúsznak el" a méretek. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Sima, finom görgetés horgony-linkekre (pl. menü -> szekció) */
+  scroll-behavior: smooth;
+  /* A sticky fejléc ne takarja el a horgony célpontját. */
+  scroll-padding-top: calc(var(--header-height) + var(--space-24) + var(--space-6));
+  /* Ne legyen vízszintes elgörgetés, ha valami kilóg */
+  overflow-x: hidden;
+}
+
+@media (min-width: 760px) {
+  html {
+    scroll-padding-top: calc(var(--header-height) + var(--space-4));
+  }
+}
+
+body {
+  /* Minimum egy képernyőmagasság, hogy a footer mindig legalul legyen */
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-normal);
+  /* Élsimítás: vékonyabb, szebb betűk sötét háttéren */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Képek, média: sosem lógjanak ki a szülőelemből */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Az űrlapelemek ne örököljenek furcsa böngésző-betűtípust */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* Linkek alapból ne legyenek kékek és aláhúzottak */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Listák ne kapjanak pontokat/behúzást */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Címek ne legyenek vastagok alapból — a tipográfia fájl szabályozza */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: var(--lh-tight);
+}
+
+/* ==========================================================================
+   AKKADÁLYMENTESÍTÉS (Accessibility) — FONTOS, ne hagyd ki!
+   --------------------------------------------------------------------------
+   A "prefers-reduced-motion" azokra a felhasználókra vonatkozik, akiknél
+   a rendszerben ki van kapcsolva az animáció (pl. mozgásérzékenység miatt).
+   Ilyenkor minden átmenetet és animációt gyakorlatilag azonnalivá teszünk.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

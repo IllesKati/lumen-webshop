@@ -1,0 +1,134 @@
+/* ==========================================================================
+    sections/_categories.css — TERMÉKKATEGÓRIÁK
+    ========================================================================== */
+
+.categories {
+   position: relative;
+   background-image: radial-gradient(ellipse at 50% 0%,
+         rgba(74, 157, 255, 0.055),
+         transparent 58%);
+}
+
+.categories__inner {
+   width: min(100%, var(--container-max));
+   margin-inline: auto;
+   padding-inline: var(--space-4);
+}
+
+.categories__header {
+   max-width: 720px;
+}
+
+.categories__title {
+   margin-top: var(--space-3);
+}
+
+.categories__intro {
+   margin-top: var(--space-4);
+   color: var(--color-text-muted);
+   font-size: var(--fs-body);
+}
+
+.categories__grid {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr);
+   gap: var(--space-4);
+}
+
+.categories__card {
+   position: relative;
+   display: flex;
+   min-width: 0;
+   min-height: 220px;
+   flex-direction: column;
+   align-items: flex-start;
+   padding: var(--space-6);
+   overflow: hidden;
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-md);
+   background: linear-gradient(145deg, var(--color-surface-2), var(--color-surface));
+   box-shadow: var(--shadow-sm);
+   transition: transform var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      background-color var(--dur-base) var(--ease-out);
+}
+
+.categories__card::after {
+   position: absolute;
+   top: 0;
+   left: var(--space-6);
+   width: 44px;
+   height: 1px;
+   background: linear-gradient(90deg, var(--color-accent), transparent);
+   content: "";
+   opacity: 0.7;
+   transition: width var(--dur-base) var(--ease-out), opacity var(--dur-base) var(--ease-out);
+}
+
+.categories__card:hover {
+   transform: translateY(-4px);
+   border-color: rgba(201, 162, 39, 0.48);
+   box-shadow: var(--shadow-md), 0 0 28px rgba(201, 162, 39, 0.07);
+}
+
+.categories__card:hover::after {
+   width: 72px;
+   opacity: 1;
+}
+
+.categories__visual {
+   display: grid;
+   width: 56px;
+   height: 56px;
+   flex: 0 0 auto;
+   place-items: center;
+   margin-bottom: var(--space-6);
+   border: 1px solid rgba(201, 162, 39, 0.26);
+   border-radius: var(--radius-sm);
+   background: radial-gradient(circle at 50% 35%, rgba(201, 162, 39, 0.13), transparent 72%);
+   color: var(--color-accent-soft);
+}
+
+.categories__icon {
+   width: 34px;
+   height: 34px;
+   fill: none;
+   stroke: currentColor;
+   stroke-linecap: round;
+   stroke-linejoin: round;
+   stroke-width: 1.4;
+}
+
+.categories__icon-dot {
+   fill: var(--color-accent-soft);
+   stroke: none;
+}
+
+.categories__name {
+   font-size: var(--fs-h3);
+}
+
+.categories__description {
+   margin-top: var(--space-3);
+   color: var(--color-text-muted);
+   font-size: var(--fs-sm);
+   line-height: var(--lh-normal);
+}
+
+@media (min-width: 640px) {
+   .categories__inner {
+      padding-inline: var(--space-6);
+   }
+
+   .categories__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6);
+   }
+}
+
+@media (min-width: 1024px) {
+   .categories__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+   }
+}

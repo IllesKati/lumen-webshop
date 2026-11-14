@@ -1,0 +1,255 @@
+/* ==========================================================================
+   layout/_footer.css — LÁBLÉC
+   --------------------------------------------------------------------------
+   ÁLLAPOT: márkablokk, navigáció, információk, kapcsolat és szerzői jogi sor.
+
+   DIZÁJN IRÁNY: sötét-elegáns, prémium. A footer a legmélyebb réteg:
+   halványabb, mint a fő tartalom, hogy a szem "leereszkedjen" rá. Az arany
+   akcentus itt visszafogott: csak a címkék és a felső elválasztó vonal.
+
+   Minden szín, méret és térköz a base/_variables.css design tokenjeiből jön.
+
+    A HTML szerkezet (index.html):
+     footer.site-footer
+       └ .site-footer__inner
+           ├ .site-footer__brand      (logó + rövid leírás)
+           ├ .site-footer__cols       (navigáció, információk, kapcsolat)
+           │    └ .site-footer__col   (címke + lista)
+          └ .site-footer__bottom     (szerzői jog)
+   ========================================================================== */
+
+
+/* --- 1. FOOTER: maga a sáv ----------------------------------------------- */
+
+.site-footer {
+   /* Mélyebb háttér, mint a test: a footer "leül" az oldal aljára */
+   background-color: var(--color-surface);
+
+   /* Felül vékony elválasztó vonal a tartalom felé */
+   border-top: 1px solid var(--color-border);
+
+   /* Bőséges felső/belső térköz — prémium, levegős zárás */
+   padding-block: var(--space-16) var(--space-8);
+
+   /* A margó jobb/bal oldalt (ha van) ne vágja le a fókuszkeretet */
+   padding-inline: var(--space-6);
+}
+
+.site-footer__inner {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-12);
+   width: min(100%, var(--container-max));
+   margin-inline: auto;
+}
+
+
+/* --- 2. MÁRKARÉSZ (logó + rövid ismertető) -------------------------------- */
+
+.site-footer__brand {
+   /* Ez a footer bal felső blokkja: logó és egy rövid felvezető */
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-3);
+   max-width: 340px;
+}
+
+/* A logó a footerben ugyanaz a karakteres arany felirat, mint a fejlécben */
+.site-footer__brand a,
+.site-footer__logo {
+   font-family: var(--font-display);
+   font-size: 1.25rem;
+   font-weight: 700;
+   letter-spacing: 0.22em;
+   text-transform: uppercase;
+   color: var(--color-accent);
+   white-space: nowrap;
+   transition: color var(--dur-fast) var(--ease-out),
+      text-shadow var(--dur-fast) var(--ease-out);
+}
+
+.site-footer__logo:hover {
+   color: var(--color-accent-soft);
+   text-shadow: var(--glow-accent);
+}
+
+.site-footer__brand p {
+   color: var(--color-text-muted);
+   font-size: var(--fs-sm);
+   line-height: var(--lh-normal);
+}
+
+
+/* --- 3. LINKOSZLOPOK ----------------------------------------------------- */
+
+.site-footer__cols {
+   /* Alapból 1 oszlop (mobil), a rács szélesebb képernyőn bővül */
+   display: grid;
+   grid-template-columns: 1fr;
+   gap: var(--space-8);
+}
+
+/* Oszlopon belüli apró címke (pl. "Vásárlás", "Kapcsolat") */
+.site-footer__col h2,
+.site-footer__col h3,
+.site-footer__col-title {
+   font-family: var(--font-body);
+   font-size: var(--fs-xs);
+   font-weight: 600;
+   letter-spacing: 0.18em;
+   text-transform: uppercase;
+   color: var(--color-accent);
+   margin-bottom: var(--space-4);
+}
+
+.site-footer__col ul {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-3);
+}
+
+/* Linkek: halvány alapból, hover-re világosak + arany aláhúzás */
+.site-footer__col a,
+.site-footer__link {
+   display: inline-flex;
+   align-items: center;
+   min-height: 40px;
+   width: fit-content;
+   font-size: var(--fs-sm);
+   color: var(--color-text-muted);
+   transition: color var(--dur-fast) var(--ease-out);
+}
+
+.site-footer__col li > span,
+.site-footer__contact-note {
+   color: var(--color-text-muted);
+   font-size: var(--fs-sm);
+   line-height: var(--lh-normal);
+}
+
+.site-footer__contact-note {
+   max-width: 260px;
+}
+
+.site-footer__col a:hover,
+.site-footer__link:hover {
+   color: var(--color-accent-soft);
+}
+
+/* Billentyűzetes fókusz: látható arany keret (akadálymentesség) */
+.site-footer__col a:focus-visible,
+.site-footer__link:focus-visible,
+.site-footer__logo:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 4px;
+   border-radius: var(--radius-sm);
+}
+
+
+/* --- 4. HÍRLEVÉL (címke + űrlap) ---------------------------------------- */
+
+.site-footer__newsletter {
+   display: flex;
+   flex-direction: column;
+   gap: var(--space-4);
+   max-width: 420px;
+}
+
+/* Az űrlap: a mező és a gomb egy sorban, szűk helyen egymás alatt */
+.site-footer__newsletter form {
+   display: flex;
+   gap: var(--space-2);
+   flex-wrap: wrap;
+}
+
+.site-footer__newsletter input[type="email"] {
+   flex: 1 1 200px;
+   min-width: 0;
+   padding: var(--space-3) var(--space-4);
+   color: var(--color-text);
+   background-color: var(--color-surface-2);
+   border: 1px solid var(--color-border);
+   border-radius: var(--radius-pill);
+   transition: border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.site-footer__newsletter input[type="email"]::placeholder {
+   color: var(--color-text-faint);
+}
+
+.site-footer__newsletter input[type="email"]:focus-visible {
+   outline: none;
+   border-color: var(--color-accent);
+   box-shadow: var(--glow-accent);
+}
+
+
+/* --- 5. ALSÓ SOR (szerzői jog + apró linkek) ---------------------------- */
+
+.site-footer__bottom {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   flex-wrap: wrap;
+   gap: var(--space-4);
+
+   /* Elválasztó vonal a felső tartalomtól */
+   padding-top: var(--space-6);
+   border-top: 1px solid var(--color-border);
+
+   font-size: var(--fs-xs);
+   color: var(--color-text-muted);
+}
+
+.site-footer__bottom a {
+   color: var(--color-text-muted);
+   transition: color var(--dur-fast) var(--ease-out);
+}
+
+.site-footer__bottom a:hover {
+   color: var(--color-accent-soft);
+}
+
+.site-footer__bottom a:focus-visible {
+   outline: 2px solid var(--color-accent);
+   outline-offset: 4px;
+   border-radius: var(--radius-sm);
+}
+
+
+/* ==========================================================================
+   6. RESZPONZÍV — a footer rács szélesedik nagyobb képernyőn
+   --------------------------------------------------------------------------
+   A részletes töréspontok a responsive/_breakpoints.css-ben vannak; itt csak
+   a footer saját rácsát bővítjük, hogy önmagában is használható legyen.
+   ========================================================================== */
+@media (min-width: 640px) {
+   .site-footer__cols {
+      grid-template-columns: repeat(2, 1fr);
+   }
+}
+
+@media (min-width: 960px) {
+   .site-footer {
+      /* Nagyobb képernyőn a belső térköz is nő */
+      padding-block: var(--space-24) var(--space-8);
+   }
+
+   .site-footer__inner {
+      /* Márka és linkoszlopok egymás mellett, copyright teljes szélességen */
+      display: grid;
+      grid-template-columns: minmax(190px, 1fr) minmax(0, 3fr);
+      align-items: start;
+      gap: var(--space-12);
+   }
+
+   .site-footer__cols {
+      grid-template-columns: repeat(3, 1fr);
+   }
+
+   /* Az alsó sor a teljes szélességet foglalja el a grid alatt */
+   .site-footer__bottom {
+      grid-column: 1 / -1;
+   }
+}
